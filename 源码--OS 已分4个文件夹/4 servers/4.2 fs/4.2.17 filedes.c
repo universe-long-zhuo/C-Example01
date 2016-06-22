@@ -14,8 +14,12 @@
 #include "fproc.h"
 #include "inode.h"
 
+// get_fd    获取_?
+// get_filp  获取_?
+// find_filp 查找_?
+
 /*===========================================================================*
-* get_fd *
+*                       get_fd 获取_？                                *
 *===========================================================================*/
 PUBLIC int get_fd(int start, mode_t bits, int *k, struct filp **fpt)
 {
@@ -24,54 +28,54 @@ PUBLIC int get_fd(int start, mode_t bits, int *k, struct filp **fpt)
 * may yet fail.
 */
 
-register struct filp *f;
-register int i;
+    register struct filp *f;
+    register int i;
 
-*k = -1; /* we need a way to tell if file desc found */
+    *k = -1; /* we need a way to tell if file desc found */
 
-/* Search the fproc fp_filp table for a free file descriptor. */
-for (i = start; i < OPEN_MAX; i++) {
-if (fp->fp_filp[i] == NIL_FILP) {
-/* A file descriptor has been located. */
-*k = i;
-break;
-}
-}
+    /* Search the fproc fp_filp table for a free file descriptor. */
+    for (i = start; i < OPEN_MAX; i++) {
+        if (fp->fp_filp[i] == NIL_FILP) {
+            /* A file descriptor has been located. */
+            *k = i;
+        break;
+        }
+    }
 
-/* Check to see if a file descriptor has been found. */
-if (*k < 0) return(EMFILE); /* this is why we initialized k to -1 */
+    /* Check to see if a file descriptor has been found. */
+    if (*k < 0) return(EMFILE); /* this is why we initialized k to -1 */
 
-/* Now that a file descriptor has been found, look for a free filp slot. */
-for (f = &filp[0]; f < &filp[NR_FILPS]; f++) {
-if (f->filp_count == 0) {
-f->filp_mode = bits;
-f->filp_pos = 0L;
-f->filp_selectors = 0;
-f->filp_select_ops = 0;
-f->filp_pipe_select_ops = 0;
-f->filp_flags = 0;
-*fpt = f;
-return(OK);
-}
-}
+    /* Now that a file descriptor has been found, look for a free filp slot. */
+    for (f = &filp[0]; f < &filp[NR_FILPS]; f++) {
+        if (f->filp_count == 0) {
+            f->filp_mode = bits;
+            f->filp_pos = 0L;
+            f->filp_selectors = 0;
+            f->filp_select_ops = 0;
+            f->filp_pipe_select_ops = 0;
+            f->filp_flags = 0;
+            *fpt = f;
+            return(OK);
+        }
+    }
 
-/* If control passes here, the filp table must be full. Report that back. */
-return(ENFILE);
+    /* If control passes here, the filp table must be full. Report that back. */
+    return(ENFILE);
 }
 /*===========================================================================*
-* get_filp *
+*                       get_filp 获取_文件 *
 *===========================================================================*/
 PUBLIC struct filp *get_filp(fild)
 int fild; /* file descriptor */
 {
 /* See if ’fild’ refers to a valid file descr. If so, return its filp ptr. */
 
-err_code = EBADF;
-if (fild < 0 || fild >= OPEN_MAX ) return(NIL_FILP);
-return(fp->fp_filp[fild]); /* may also be NIL_FILP */
+    err_code = EBADF;
+    if (fild < 0 || fild >= OPEN_MAX ) return(NIL_FILP);
+    return(fp->fp_filp[fild]); /* may also be NIL_FILP */
 }
 /*===========================================================================*
-* find_filp *
+*                       find_filp 查找 *
 *===========================================================================*/
 PUBLIC struct filp *find_filp(register struct inode *rip, mode_t bits)
 {
@@ -82,14 +86,14 @@ PUBLIC struct filp *find_filp(register struct inode *rip, mode_t bits)
 * Like ’get_fd’ it performs its job by linear search through the filp table.
 */
 
-register struct filp *f;
+    register struct filp *f;
 
-for (f = &filp[0]; f < &filp[NR_FILPS]; f++) {
-if (f->filp_count != 0 && f->filp_ino == rip && (f->filp_mode & bits)){
-return(f);
-}
-}
+    for (f = &filp[0]; f < &filp[NR_FILPS]; f++) {
+        if (f->filp_count != 0 && f->filp_ino == rip && (f->filp_mode & bits)){
+            return(f);
+        }
+    }
 
-/* If control passes here, the filp wasn’t there. Report that back. */
-return(NIL_FILP);
+    /* If control passes here, the filp wasn’t there. Report that back. */
+    return(NIL_FILP);
 }

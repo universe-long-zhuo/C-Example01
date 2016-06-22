@@ -56,28 +56,32 @@ DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*16 = /dev/random*/
 DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*17 = /dev/cmos */
 };
 
+// do_devctl  驱动程序控制
+// map_driver 映射_驱动程序
+// build_dmap 建立_驱动程序映射
+
 /*===========================================================================*
-* do_devctl *
+*                       do_devctl 设备控制 *
 *===========================================================================*/
 PUBLIC int do_devctl()
 {
-int result;
+    int result;
 
-switch(m_in.ctl_req) {
-case DEV_MAP:
-/* Try to update device mapping. */
-result = map_driver(m_in.dev_nr, m_in.driver_nr, m_in.dev_style);
-break;
-case DEV_UNMAP:
-result = ENOSYS;
-break;
-default:
-result = EINVAL;
-}
-return(result);
+    switch(m_in.ctl_req) {
+        case DEV_MAP:
+            /* Try to update device mapping. */
+            result = map_driver(m_in.dev_nr, m_in.driver_nr, m_in.dev_style);
+            break;
+        case DEV_UNMAP:
+            result = ENOSYS;
+            break;
+        default:
+            result = EINVAL;
+    }
+    return(result);
 }
 /*===========================================================================*
-* map_driver *
+*                       map_driver 映射_驱动程序 *
 *===========================================================================*/
 PUBLIC int map_driver(major, proc_nr, style)
 int major; /* major number of the device */
@@ -90,32 +94,32 @@ int style; /* style of the device */
 * Normal error codes are returned so that this function can be used from
 * a system call that tries to dynamically install a new driver.
 */
-struct dmap *dp;
+    struct dmap *dp;
 
-/* Get pointer to device entry in the dmap table. */
-if (major >= NR_DEVICES) return(ENODEV);
-dp = &dmap[major];
+    /* Get pointer to device entry in the dmap table. */
+    if (major >= NR_DEVICES) return(ENODEV);
+    dp = &dmap[major];
 
-/* See if updating the entry is allowed. */
-if (! (dp->dmap_flags & DMAP_MUTABLE)) return(EPERM);
-if (dp->dmap_flags & DMAP_BUSY) return(EBUSY);
+    /* See if updating the entry is allowed. */
+    if (! (dp->dmap_flags & DMAP_MUTABLE)) return(EPERM);
+    if (dp->dmap_flags & DMAP_BUSY) return(EBUSY);
 
-/* Check process number of new driver. */
-if (! isokprocnr(proc_nr)) return(EINVAL);
+    /* Check process number of new driver. */
+    if (! isokprocnr(proc_nr)) return(EINVAL);
 
-/* Try to update the entry. */
-switch (style) {
-case STYLE_DEV: dp->dmap_opcl = gen_opcl; break;
-case STYLE_TTY: dp->dmap_opcl = tty_opcl; break;
-case STYLE_CLONE: dp->dmap_opcl = clone_opcl; break;
-default: return(EINVAL);
-}
-dp->dmap_io = gen_io;
-dp->dmap_driver = proc_nr;
-return(OK);
+    /* Try to update the entry. */
+    switch (style) {
+        case STYLE_DEV: dp->dmap_opcl = gen_opcl; break;
+        case STYLE_TTY: dp->dmap_opcl = tty_opcl; break;
+        case STYLE_CLONE: dp->dmap_opcl = clone_opcl; break;
+    default: return(EINVAL);
+    }
+    dp->dmap_io = gen_io;
+    dp->dmap_driver = proc_nr;
+    return(OK);
 }
 /*===========================================================================*
-* build_dmap *
+*                       build_dmap 建立_驱动程序映射 *
 *===========================================================================*/
 PUBLIC void build_dmap()
 {
@@ -124,51 +128,51 @@ PUBLIC void build_dmap()
 * selection. The boot driver and the controller it handles are set at
 * the boot monitor.
 */
-char driver[16];
-char *controller = "c##";
-int nr, major = -1;
-int i,s;
-struct dmap *dp;
+    char driver[16];
+    char *controller = "c##";
+    int nr, major = -1;
+    int i,s;
+    struct dmap *dp;
 
-/* Build table with device <-> driver mappings. */
-for (i=0; i<NR_DEVICES; i++) {
-dp = &dmap[i];
-if (i < sizeof(init_dmap)/sizeof(struct dmap) &&
-init_dmap[i].dmap_opcl != no_dev) { /* a preset driver */
-dp->dmap_opcl = init_dmap[i].dmap_opcl;
-dp->dmap_io = init_dmap[i].dmap_io;
-dp->dmap_driver = init_dmap[i].dmap_driver;
-dp->dmap_flags = init_dmap[i].dmap_flags;
-} else { /* no default */
-dp->dmap_opcl = no_dev;
-dp->dmap_io = 0;
-dp->dmap_driver = 0;
-dp->dmap_flags = DMAP_MUTABLE;
-}
-}
+    /* Build table with device <-> driver mappings. */
+    for (i=0; i<NR_DEVICES; i++) {
+        dp = &dmap[i];
+        if (i < sizeof(init_dmap)/sizeof(struct dmap) &&
+        init_dmap[i].dmap_opcl != no_dev) { /* a preset driver */
+            dp->dmap_opcl = init_dmap[i].dmap_opcl;
+            dp->dmap_io = init_dmap[i].dmap_io;
+            dp->dmap_driver = init_dmap[i].dmap_driver;
+            dp->dmap_flags = init_dmap[i].dmap_flags;
+        } else { /* no default */
+            dp->dmap_opcl = no_dev;
+            dp->dmap_io = 0;
+            dp->dmap_driver = 0;
+            dp->dmap_flags = DMAP_MUTABLE;
+        }
+    }
 
-/* Get settings of ’controller’ and ’driver’ at the boot monitor. */
-if ((s = env_get_param("label", driver, sizeof(driver))) != OK)
-panic(__FILE__,"couldn’t get boot monitor parameter ’driver’", s);
-if ((s = env_get_param("controller", controller, sizeof(controller))) != OK)
-panic(__FILE__,"couldn’t get boot monitor parameter ’controller’", s);
+    /* Get settings of ’controller’ and ’driver’ at the boot monitor. */
+    if ((s = env_get_param("label", driver, sizeof(driver))) != OK)
+        panic(__FILE__,"couldn’t get boot monitor parameter ’driver’", s);
+    if ((s = env_get_param("controller", controller, sizeof(controller))) != OK)
+        panic(__FILE__,"couldn’t get boot monitor parameter ’controller’", s);
 
-/* Determine major number to map driver onto. */
-if (controller[0] == ’f’ && controller[1] == ’d’) {
-major = FLOPPY_MAJOR;
-}
-else if (controller[0] == ’c’ && isdigit(controller[1])) {
-if ((nr = (unsigned) atoi(&controller[1])) > NR_CTRLRS)
-panic(__FILE__,"monitor ’controller’ maximum ’c#’ is", NR_CTRLRS);
-major = CTRLR(nr);
-}
-else {
-panic(__FILE__,"monitor ’controller’ syntax is ’c#’ of ’fd’", NO_NUM);
-}
+    /* Determine major number to map driver onto. */
+    if (controller[0] == ’f’ && controller[1] == ’d’) {
+        major = FLOPPY_MAJOR;
+    }
+    else if (controller[0] == ’c’ && isdigit(controller[1])) {
+        if ((nr = (unsigned) atoi(&controller[1])) > NR_CTRLRS)
+            panic(__FILE__,"monitor ’controller’ maximum ’c#’ is", NR_CTRLRS);
+        major = CTRLR(nr);
+    }
+    else {
+        panic(__FILE__,"monitor ’controller’ syntax is ’c#’ of ’fd’", NO_NUM);
+    }
 
-/* Now try to set the actual mapping and report to the user. */
-if ((s=map_driver(major, DRVR_PROC_NR, STYLE_DEV)) != OK)
-panic(__FILE__,"map_driver failed",s);
-printf("Boot medium driver: %s driver mapped onto controller %s.\n",
-driver, controller);
+    /* Now try to set the actual mapping and report to the user. */
+    if ((s=map_driver(major, DRVR_PROC_NR, STYLE_DEV)) != OK)
+        panic(__FILE__,"map_driver failed",s);
+    printf("Boot medium driver: %s driver mapped onto controller %s.\n",
+        driver, controller);
 }
