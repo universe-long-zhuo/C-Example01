@@ -1,5 +1,3 @@
-blank
-MINIX SOURCE CODE File: include/ansi.h 639
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                              include/ansi.h
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -11,7 +9,6 @@ MINIX SOURCE CODE File: include/ansi.h 639
 * of the rules. (For consistency with the new ’#ifdef _ANSI" tests in
 * the headers, _ANSI should really be defined as nothing, but that would
 * break many library routines that use "#if _ANSI".)
-
 * If _ANSI ends up being defined, a macro
 *
 * _PROTOTYPE(function, params)
@@ -21,6 +18,27 @@ MINIX SOURCE CODE File: include/ansi.h 639
 * prototypes, as needed. Finally, some programs use _CONST, _VOIDSTAR etc
 * in such a way that they are portable over both ANSI and K&R compilers.
 * The appropriate macros are defined here.
+*/
+
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
 */
 
 #ifndef _ANSI_H
