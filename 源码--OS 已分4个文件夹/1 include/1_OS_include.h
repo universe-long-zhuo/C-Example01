@@ -1889,7 +1889,6 @@ phys_bytes params_base; /* parameters passed by boot monitor */
 phys_bytes params_size;
 int nr_procs; /* number of user processes */
 int nr_tasks; /* number of kernel tasks */
-MINIX SOURCE CODE File: include/minix/type.h 671
 char release[6]; /* kernel release number */
 char version[6]; /* kernel version number */
 int relocking; /* relocking check (for debugging) */

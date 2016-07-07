@@ -29,10 +29,10 @@
 #define NR_DEVS 6 /* number of minor devices */
 
 PRIVATE struct device m_geom[NR_DEVS]; /* base and size of each device */
-PRIVATE int m_seg[NR_DEVS]; /* segment index of each device */
-PRIVATE int m_device; /* current device */
-PRIVATE struct kinfo kinfo; /* kernel information */
-PRIVATE struct machine machine; /* machine information */
+PRIVATE int m_seg[NR_DEVS];            /* segment index of each device */
+PRIVATE int m_device;                  /* current device */
+PRIVATE struct kinfo kinfo;            /* kernel information */
+PRIVATE struct machine machine;        /* machine information */
 
 extern int errno; /* error number for PM calls */
 
@@ -47,21 +47,20 @@ FORWARD _PROTOTYPE( void m_geometry, (struct partition *entry) );
 
 /* Entry points to this driver. */
 PRIVATE struct driver m_dtab = {
-m_name, /* current device’s name */
-m_do_open, /* open or mount */
-do_nop, /* nothing on a close */
-m_ioctl, /* specify ram disk geometry */
-m_prepare, /* prepare for I/O on a given minor device */
-m_transfer, /* do the I/O */
-nop_cleanup, /* no need to clean up */
-m_geometry, /* memory device "geometry" */
-nop_signal, /* system signals */
-MINIX SOURCE CODE File: drivers/memory/memory.c 783
-nop_alarm,
-nop_cancel,
-nop_select,
-NULL,
-NULL
+    m_name,      /* current device’s name */
+    m_do_open,   /* open or mount */
+    do_nop,      /* nothing on a close */
+    m_ioctl,     /* specify ram disk geometry */
+    m_prepare,   /* prepare for I/O on a given minor device */
+    m_transfer,  /* do the I/O */
+    nop_cleanup, /* no need to clean up */
+    m_geometry,  /* memory device "geometry" */
+    nop_signal,  /* system signals */
+    nop_alarm,
+    nop_cancel,
+    nop_select,
+    NULL,
+    NULL
 };
 
 /* Buffer for the /dev/zero null byte feed. */

@@ -46,7 +46,7 @@
 
 /* Claim space for variables. */
 PRIVATE u8_t buffer[(unsigned) 2 * DMA_BUF_SIZE + BUF_EXTRA];
-u8_t *tmp_buf; /* the DMA buffer eventually */
+u8_t *tmp_buf;       /* the DMA buffer eventually */
 phys_bytes tmp_phys; /* phys address of DMA buffer */
 
 FORWARD _PROTOTYPE( void init_buffer, (void) );
@@ -54,6 +54,14 @@ FORWARD _PROTOTYPE( int do_rdwt, (struct driver *dr, message *mp) );
 FORWARD _PROTOTYPE( int do_vrdwt, (struct driver *dr, message *mp) );
 
 int device_caller;
+
+// Minix驱动可以响应的消息有有六大类： 
+// 1. OPEN，打开设备； 
+// 2. CLOSE，关闭设备； 
+// 3. READ，对设备读操作； 
+// 4. WRITE，对设备写操作； 
+// 5. IOCTL，用于I/O控制； 
+// 6. SCATERED_IO，预读消息。
 
 // driver_task 驱动程序_任务
 // init_buffer   初始化_缓冲区
@@ -69,9 +77,14 @@ int device_caller;
 // nop_select  没有什么_选择
 // do_diocntl        做_驱动程序输入输出控制
 
+// 参数& 取地址符号
+// & ：取地址符
+// &a：变量a的地址 
+
 /*===========================================================================*
 *                       driver_task 驱动程序_任务 *
 *===========================================================================*/
+// 参数dp是不是device points的缩写？
 PUBLIC void driver_task(dp)
 struct driver *dp; /* Device dependent entry points. */
 {
@@ -147,7 +160,7 @@ PRIVATE void init_buffer()
 * ’tmp_phys’, the normal address is ’tmp_buf’.
 */
 
-    unsigned left;
+    unsigned left;  /* 无符号 */
 
     tmp_buf = buffer;
     sys_umap(SELF, D, (vir_bytes)buffer, (phys_bytes)sizeof(buffer), &tmp_phys);
@@ -163,7 +176,7 @@ PRIVATE void init_buffer()
 *===========================================================================*/
 PRIVATE int do_rdwt(dp, mp)
 struct driver *dp; /* device dependent entry points */
-message *mp; /* pointer to read or write message */
+message *mp;       /* pointer to read or write message */
 {
 /* Carry out a single read or write request. */
     iovec_t iovec1;
@@ -210,7 +223,7 @@ message *mp; /* pointer to read or write message */
 
     nr_req = mp->COUNT; /* Length of I/O vector */
 
-    if (mp->m_source < 0) {
+    if (mp->m_source < 0) { /* 用法: 指针->成员名字 */
         /* Called by a task, no need to copy vector. */
         iov = (iovec_t *) mp->ADDRESS;
     } else {
@@ -267,7 +280,6 @@ message *mp;
         default: return(EIO);
     }
 }
-MINIX SOURCE CODE File: drivers/libdriver/driver.c 777
 /*============================================================================*
 *                       nop_signal 没有任何_信号 *
 *============================================================================*/

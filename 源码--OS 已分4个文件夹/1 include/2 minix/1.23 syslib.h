@@ -70,6 +70,7 @@ _PROTOTYPE ( int sys_irqctl, (int request, int irq_vec, int policy,
 int *irq_hook_id) );
 
 /* Shorthands for sys_vircopy() and sys_physcopy() system calls. */
+/*                sys_虚拟复制()    sys_物理复制()               */
 #define sys_biosin(bios_vir, dst_vir, bytes) \
 sys_vircopy(SELF, BIOS_SEG, bios_vir, SELF, D, dst_vir, bytes)
 #define sys_biosout(src_vir, bios_vir, bytes) \

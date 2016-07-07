@@ -5,13 +5,13 @@
 * device driver code.
 */
 
-#define _POSIX_SOURCE 1 /* tell headers to include POSIX stuff */
-#define _MINIX 1 /* tell headers to include MINIX stuff */
-#define _SYSTEM 1 /* get negative error number in <errno.h> */
+#define _POSIX_SOURCE 1     /* tell headers to include POSIX stuff */
+#define _MINIX 1            /* tell headers to include MINIX stuff */
+#define _SYSTEM 1           /* get negative error number in <errno.h> */
 
 /* The following are so basic, all the *.c files get them automatically. */
-#include <minix/config.h> /* MUST be first */
-#include <ansi.h> /* MUST be second */
+#include <minix/config.h>   /* MUST be first */
+#include <ansi.h>           /* MUST be second */
 #include <minix/type.h>
 #include <minix/ipc.h>
 #include <minix/com.h>
@@ -79,9 +79,9 @@ _PROTOTYPE( int nop_select, (struct driver *dp, message *m_ptr) );
 _PROTOTYPE( int do_diocntl, (struct driver *dp, message *m_ptr) );
 
 /* Parameters for the disk drive. */
-#define SECTOR_SIZE 512 /* physical sector size in bytes */
-#define SECTOR_SHIFT 9  /* for division */
-#define SECTOR_MASK 511 /* and remainder */
+#define SECTOR_SIZE 512     /* physical sector size in bytes */
+#define SECTOR_SHIFT 9      /* for division */
+#define SECTOR_MASK 511     /* and remainder */
 
 /* Size of the DMA buffer buffer in bytes. */
 #define USE_EXTRA_DMA_BUF 0 /* usually not needed */

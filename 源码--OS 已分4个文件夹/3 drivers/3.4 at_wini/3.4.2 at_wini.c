@@ -34,66 +34,66 @@
 #define REG_CTL_BASE0 0x3F6 /* control base register of controller 0 */
 #define REG_CTL_BASE1 0x376 /* control base register of controller 1 */
 
-#define REG_DATA 0       /* data register (offset from the base reg.) */
+#define REG_DATA    0    /* data register (offset from the base reg.) */
 #define REG_PRECOMP 1    /* start of write precompensation */
-#define REG_COUNT 2      /* sectors to transfer */
-#define REG_SECTOR 3     /* sector number */
-#define REG_CYL_LO 4     /* low byte of cylinder number */
-#define REG_CYL_HI 5     /* high byte of cylinder number */
-#define REG_LDH 6        /* lba, drive and head */
+#define REG_COUNT   2    /* sectors to transfer */
+#define REG_SECTOR  3    /* sector number */
+#define REG_CYL_LO  4    /* low byte of cylinder number */
+#define REG_CYL_HI  5    /* high byte of cylinder number */
+#define REG_LDH     6    /* lba, drive and head */
 #define LDH_DEFAULT 0xA0 /* ECC enable, 512 bytes per sector */
-#define LDH_LBA 0x40     /* Use LBA addressing */
+#define LDH_LBA     0x40 /* Use LBA addressing */
 #define ldh_init(drive) (LDH_DEFAULT | ((drive) << 4))
 
 /* Read only registers */
-#define REG_STATUS 7    /* status */
-#define STATUS_BSY 0x80 /* controller busy */
-#define STATUS_RDY 0x40 /* drive ready */
-#define STATUS_WF 0x20  /* write fault */
-#define STATUS_SC 0x10  /* seek complete (obsolete) */
-#define STATUS_DRQ 0x08 /* data transfer request */
-#define STATUS_CRD 0x04 /* corrected data */
-#define STATUS_IDX 0x02 /* index pulse */
-#define STATUS_ERR 0x01 /* error */
+#define REG_STATUS    7     /* status */
+#define STATUS_BSY    0x80  /* controller busy */
+#define STATUS_RDY    0x40  /* drive ready */
+#define STATUS_WF     0x20  /* write fault */
+#define STATUS_SC     0x10  /* seek complete (obsolete) */
+#define STATUS_DRQ    0x08  /* data transfer request */
+#define STATUS_CRD    0x04  /* corrected data */
+#define STATUS_IDX    0x02  /* index pulse */
+#define STATUS_ERR    0x01  /* error */
 #define STATUS_ADMBSY 0x100 /* administratively busy (software) */
-#define REG_ERROR 1     /* error code */
-#define ERROR_BB 0x80   /* bad block */
-#define ERROR_ECC 0x40  /* bad ecc bytes */
-#define ERROR_ID 0x10   /* id not found */
-#define ERROR_AC 0x04   /* aborted command */
-#define ERROR_TK 0x02   /* track zero error */
-#define ERROR_DM 0x01   /* no data address mark */
+#define REG_ERROR     1     /* error code */
+#define ERROR_BB      0x80  /* bad block */
+#define ERROR_ECC     0x40  /* bad ecc bytes */
+#define ERROR_ID      0x10  /* id not found */
+#define ERROR_AC      0x04  /* aborted command */
+#define ERROR_TK      0x02  /* track zero error */
+#define ERROR_DM      0x01  /* no data address mark */
 
 /* Write only registers */
-#define REG_COMMAND 7        /* command */
-#define CMD_IDLE 0x00        /* for w_command: drive idle */
-#define CMD_RECALIBRATE 0x10 /* recalibrate drive */
-#define CMD_READ 0x20        /* read data */
-#define CMD_READ_EXT 0x24    /* read data (LBA48 addressed) */
-#define CMD_WRITE 0x30       /* write data */
-#define CMD_WRITE_EXT 0x34   /* write data (LBA48 addressed) */
-#define CMD_READVERIFY 0x40  /* read verify */
-#define CMD_FORMAT 0x50      /* format track */
-#define CMD_SEEK 0x70        /* seek cylinder */
-#define CMD_DIAG 0x90        /* execute device diagnostics */
-#define CMD_SPECIFY 0x91     /* specify parameters */
-#define ATA_IDENTIFY 0xEC    /* identify drive */
-/* #define REG_CTL 0x206 */  /* control register */
-#define REG_CTL 0            /* control register */
-#define CTL_NORETRY 0x80     /* disable access retry */
-#define CTL_NOECC 0x40       /* disable ecc retry */
-#define CTL_EIGHTHEADS 0x08  /* more than eight heads */
-#define CTL_RESET 0x04       /* reset controller */
-#define CTL_INTDISABLE 0x02  /* disable interrupts */
+#define REG_COMMAND     7     /* command */
+#define CMD_IDLE        0x00  /* for w_command: drive idle */
+#define CMD_RECALIBRATE 0x10  /* recalibrate drive */
+#define CMD_READ        0x20  /* read data */
+#define CMD_READ_EXT    0x24  /* read data (LBA48 addressed) */
+#define CMD_WRITE       0x30  /* write data */
+#define CMD_WRITE_EXT   0x34  /* write data (LBA48 addressed) */
+#define CMD_READVERIFY  0x40  /* read verify */
+#define CMD_FORMAT      0x50  /* format track */
+#define CMD_SEEK        0x70  /* seek cylinder */
+#define CMD_DIAG        0x90  /* execute device diagnostics */
+#define CMD_SPECIFY     0x91  /* specify parameters */
+#define ATA_IDENTIFY    0xEC  /* identify drive */
+/* #define REG_CTL 0x206 */   /* control register */
+#define REG_CTL         0     /* control register */
+#define CTL_NORETRY     0x80  /* disable access retry */
+#define CTL_NOECC       0x40  /* disable ecc retry */
+#define CTL_EIGHTHEADS  0x08  /* more than eight heads */
+#define CTL_RESET       0x04  /* reset controller */
+#define CTL_INTDISABLE  0x02  /* disable interrupts */
 
-#define REG_STATUS 7         /* status */
-#define STATUS_BSY 0x80      /* controller busy */
-#define STATUS_DRDY 0x40     /* drive ready */
-#define STATUS_DMADF 0x20    /* dma ready/drive fault */
-#define STATUS_SRVCDSC 0x10  /* service or dsc */
-#define STATUS_DRQ 0x08      /* data transfer request */
-#define STATUS_CORR 0x04     /* correctable error occurred */
-#define STATUS_CHECK 0x01    /* check error */
+#define REG_STATUS      7     /* status */
+#define STATUS_BSY      0x80  /* controller busy */
+#define STATUS_DRDY     0x40  /* drive ready */
+#define STATUS_DMADF    0x20  /* dma ready/drive fault */
+#define STATUS_SRVCDSC  0x10  /* service or dsc */
+#define STATUS_DRQ      0x08  /* data transfer request */
+#define STATUS_CORR     0x04  /* correctable error occurred */
+#define STATUS_CHECK    0x01  /* check error */
 
 /* Interrupt request lines. */
 #define NO_IRQ 0 /* no IRQ set yet */
@@ -103,13 +103,13 @@
 
 /* Common command block */
 struct command {
-u8_t precomp; /* REG_PRECOMP, etc. */
-u8_t count;
-u8_t sector;
-u8_t cyl_lo;
-u8_t cyl_hi;
-u8_t ldh;
-u8_t command;
+    u8_t precomp; /* REG_PRECOMP, etc. */
+    u8_t count;
+    u8_t sector;
+    u8_t cyl_lo;
+    u8_t cyl_hi;
+    u8_t ldh;
+    u8_t command;
 };
 
 /* Error codes */
@@ -120,24 +120,24 @@ u8_t command;
 #define WAKEUP (32*HZ) /* drive may be out for 31 seconds max */
 
 /* Miscellaneous. */
-#define MAX_DRIVES 8
-#define COMPAT_DRIVES 4
-#define MAX_SECS 256 /* controller can transfer this many sectors */
-#define MAX_ERRORS 4 /* how often to try rd/wt before quitting */
+#define MAX_DRIVES          8
+#define COMPAT_DRIVES       4
+#define MAX_SECS          256 /* controller can transfer this many sectors */
+#define MAX_ERRORS          4 /* how often to try rd/wt before quitting */
 #define NR_MINORS (MAX_DRIVES * DEV_PER_DRIVE)
 #define SUB_PER_DRIVE (NR_PARTITIONS * NR_PARTITIONS)
 #define NR_SUBDEVS (MAX_DRIVES * SUB_PER_DRIVE)
-#define DELAY_USECS 1000 /* controller timeout in microseconds */
-#define DELAY_TICKS 1 /* controller timeout in ticks */
+#define DELAY_USECS      1000 /* controller timeout in microseconds */
+#define DELAY_TICKS         1 /* controller timeout in ticks */
 #define DEF_TIMEOUT_TICKS 300 /* controller timeout in ticks */
-#define RECOVERY_USECS 5/* controller recovery time in microseconds */
-#define RECOVERY_TICKS 30 /* controller recovery time in ticks */
-#define INITIALIZED 0x01 /* drive is initialized */
-#define DEAF 0x02 /* controller must be reset */
-#define SMART 0x04 /* drive supports ATA commands */
-#define ATAPI 0 /* don’t bother with ATAPI; optimise out */
-#define IDENTIFIED 0x10 /* w_identify done successfully */
-#define IGNORING 0x20 /* w_identify failed once */
+#define RECOVERY_USECS      5 /* controller recovery time in microseconds */
+#define RECOVERY_TICKS     30 /* controller recovery time in ticks */
+#define INITIALIZED      0x01 /* drive is initialized */
+#define DEAF             0x02 /* controller must be reset */
+#define SMART            0x04 /* drive supports ATA commands */
+#define ATAPI               0 /* don’t bother with ATAPI; optimise out */
+#define IDENTIFIED       0x10 /* w_identify done successfully */
+#define IGNORING         0x20 /* w_identify failed once */
 
 /* Timeouts and max retries. */
 int timeout_ticks = DEF_TIMEOUT_TICKS, max_errors = MAX_ERRORS;
@@ -155,28 +155,28 @@ int w_next_drive = 0;
 * controller 0 is always the ’compatability’ ide controller, at
 * the fixed locations, whether present or not.
 */
-PRIVATE struct wini { /* main drive struct, one entry per drive */
-unsigned state; /* drive state: deaf, initialized, dead */
-unsigned w_status; /* device status register */
-unsigned base_cmd; /* command base register */
-unsigned base_ctl; /* control base register */
-unsigned irq; /* interrupt request line */
-unsigned irq_mask; /* 1 << irq */
-unsigned irq_need_ack; /* irq needs to be acknowledged */
-int irq_hook_id; /* id of irq hook at the kernel */
-int lba48; /* supports lba48 */
-unsigned lcylinders; /* logical number of cylinders (BIOS) */
-unsigned lheads; /* logical number of heads */
-unsigned lsectors; /* logical number of sectors per track */
-unsigned pcylinders; /* physical number of cylinders (translated) */
-unsigned pheads; /* physical number of heads */
-unsigned psectors; /* physical number of sectors per track */
-unsigned ldhpref; /* top four bytes of the LDH (head) register */
-unsigned precomp; /* write precompensation cylinder / 4 */
-unsigned max_count; /* max request for this drive */
-unsigned open_ct; /* in-use count */
-struct device part[DEV_PER_DRIVE]; /* disks and partitions */
-struct device subpart[SUB_PER_DRIVE]; /* subpartitions */
+PRIVATE struct wini {      /* main drive struct, one entry per drive */
+    unsigned state;        /* drive state: deaf, initialized, dead */
+    unsigned w_status;     /* device status register */
+    unsigned base_cmd;     /* command base register */
+    unsigned base_ctl;     /* control base register */
+    unsigned irq;          /* interrupt request line */
+    unsigned irq_mask;     /* 1 << irq */
+    unsigned irq_need_ack; /* irq needs to be acknowledged */
+    int irq_hook_id;       /* id of irq hook at the kernel */
+    int lba48;             /* supports lba48 */
+    unsigned lcylinders;   /* logical number of cylinders (BIOS) */
+    unsigned lheads;       /* logical number of heads */
+    unsigned lsectors;     /* logical number of sectors per track */
+    unsigned pcylinders;   /* physical number of cylinders (translated) */
+    unsigned pheads;       /* physical number of heads */
+    unsigned psectors;     /* physical number of sectors per track */
+    unsigned ldhpref;      /* top four bytes of the LDH (head) register */
+    unsigned precomp;      /* write precompensation cylinder / 4 */
+    unsigned max_count;    /* max request for this drive */
+    unsigned open_ct;      /* in-use count */
+    struct device part[DEV_PER_DRIVE];    /* disks and partitions */
+    struct device subpart[SUB_PER_DRIVE]; /* subpartitions */
 } wini[MAX_DRIVES], *w_wn;
 
 PRIVATE int w_device = -1;
@@ -184,11 +184,11 @@ PRIVATE int w_controller = -1;
 PRIVATE int w_major = -1;
 PRIVATE char w_id_string[40];
 
-PRIVATE int win_tasknr; /* my task number */
-PRIVATE int w_command; /* current command in execution */
-PRIVATE u8_t w_byteval; /* used for SYS_IRQCTL */
-PRIVATE int w_drive; /* selected drive */
-PRIVATE int w_controller; /* selected controller */
+PRIVATE int win_tasknr;      /* my task number */
+PRIVATE int w_command;       /* current command in execution */
+PRIVATE u8_t w_byteval;      /* used for SYS_IRQCTL */
+PRIVATE int w_drive;         /* selected drive */
+PRIVATE int w_controller;    /* selected controller */
 PRIVATE struct device *w_dv; /* device’s base and size */
 
 FORWARD _PROTOTYPE( void init_params, (void) );
@@ -196,7 +196,6 @@ FORWARD _PROTOTYPE( void init_drive, (struct wini *, int, int, int, int, int, in
 FORWARD _PROTOTYPE( void init_params_pci, (int) );
 FORWARD _PROTOTYPE( int w_do_open, (struct driver *dp, message *m_ptr) );
 FORWARD _PROTOTYPE( struct device *w_prepare, (int dev) );
-MINIX SOURCE CODE File: drivers/at_wini/at_wini.c 791
 FORWARD _PROTOTYPE( int w_identify, (void) );
 FORWARD _PROTOTYPE( char *w_name, (void) );
 FORWARD _PROTOTYPE( int w_specify, (void) );
@@ -219,20 +218,20 @@ FORWARD _PROTOTYPE( void w_geometry, (struct partition *entry) );
 
 /* Entry points to this driver. */
 PRIVATE struct driver w_dtab = {
-w_name, /* current device’s name */
-w_do_open, /* open or mount request, initialize device */
-w_do_close, /* release device */
-do_diocntl, /* get or set a partition’s geometry */
-w_prepare, /* prepare for I/O on a given minor device */
-w_transfer, /* do the I/O */
-nop_cleanup, /* nothing to clean up */
-w_geometry, /* tell the geometry of the disk */
-nop_signal, /* no cleanup needed on shutdown */
-nop_alarm, /* ignore leftover alarms */
-nop_cancel, /* ignore CANCELs */
-nop_select, /* ignore selects */
-w_other, /* catch-all for unrecognized commands and ioctls */
-w_hw_int /* leftover hardware interrupts */
+    w_name,      /* current device’s name */
+    w_do_open,   /* open or mount request, initialize device */
+    w_do_close,  /* release device */
+    do_diocntl,  /* get or set a partition’s geometry */
+    w_prepare,   /* prepare for I/O on a given minor device */
+    w_transfer,  /* do the I/O */
+    nop_cleanup, /* nothing to clean up */
+    w_geometry,  /* tell the geometry of the disk */
+    nop_signal,  /* no cleanup needed on shutdown */
+    nop_alarm,   /* ignore leftover alarms */
+    nop_cancel,  /* ignore CANCELs */
+    nop_select,  /* ignore selects */
+    w_other,     /* catch-all for unrecognized commands and ioctls */
+    w_hw_int     /* leftover hardware interrupts */
 };
 
 // at_winchester_task        在_温彻斯特大学_任务
@@ -294,9 +293,9 @@ PRIVATE void init_params()
 
     if (w_instance == 0) {
         /* Get the number of drives from the BIOS data area */
-        if ((s=sys_vircopy(SELF, BIOS_SEG, NR_HD_DRIVES_ADDR,
+        if ((s=sys_vircopy(SELF, BIOS_SEG, NR_HD_DRIVES_ADDR,    /* vir 虚拟*/
         SELF, D, (vir_bytes) params, NR_HD_DRIVES_SIZE)) != OK)
-        panic(w_name(), "Couldn’t read BIOS", s);
+            panic(w_name(), "Couldn’t read BIOS", s);
         if ((nr_drives = params[0]) > 2) nr_drives = 2;
 
         for (drive = 0, wn = wini; drive < COMPAT_DRIVES; drive++, wn++) {
@@ -1140,11 +1139,12 @@ message *m;
     if (m->m_type != DEV_IOCTL ) {
         return EINVAL;
     }
-
+    
+	/* 5星级难，流程图 */
     if (m->REQUEST == DIOCTIMEOUT) {
         if ((r=sys_datacopy(m->PROC_NR, (vir_bytes)m->ADDRESS,
         SELF, (vir_bytes)&timeout, sizeof(timeout))) != OK)
-        return r;
+            return r;
 
         if (timeout == 0) {
             /* Restore defaults. */

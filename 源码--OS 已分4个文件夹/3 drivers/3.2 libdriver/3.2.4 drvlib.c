@@ -34,9 +34,9 @@ FORWARD _PROTOTYPE( void sort, (struct part_entry *table) );
 *============================================================================*/
 PUBLIC void partition(dp, device, style, atapi)
 struct driver *dp; /* device dependent entry points */
-int device; /* device to partition */
-int style; /* partitioning style: floppy, primary, sub. */
-int atapi; /* atapi device */
+int device;        /* device to partition */
+int style;         /* partitioning style: floppy, primary, sub. */
+int atapi;         /* atapi device */
 {
 /* This routine is called on first open to initialize the partition tables
 * of a device. It makes sure that each partition falls safely within the
