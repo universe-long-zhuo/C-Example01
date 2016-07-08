@@ -21,7 +21,6 @@
 #include "pm.h"
 #include <signal.h>
 #include "mproc.h"
-896 File: servers/pm/break.c MINIX SOURCE CODE
 #include "param.h"
 
 #define DATA_CHANGED 1 /* flag value when data segment size changed */

@@ -26,7 +26,6 @@ _PROTOTYPE( int do_newmap, (message *m_ptr) );
 _PROTOTYPE( int do_exit, (message *m_ptr) );
 _PROTOTYPE( int do_trace, (message *m_ptr) );
 _PROTOTYPE( int do_nice, (message *m_ptr) );
-MINIX SOURCE CODE File: kernel/system.h 755
 _PROTOTYPE( int do_copy, (message *m_ptr) );
 #define do_vircopy do_copy
 #define do_physcopy do_copy

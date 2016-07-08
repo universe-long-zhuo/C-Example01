@@ -233,7 +233,7 @@ PUBLIC clock_t get_uptime()
     return(realtime);
 }
 /*===========================================================================*
-*                       set_timer 设置_时间者 *
+*                       set_timer 设置_定时器 *
 *===========================================================================*/
 PUBLIC void set_timer(tp, exp_time, watchdog)
 struct timer *tp; /* pointer to timer structure */
@@ -248,7 +248,7 @@ MINIX SOURCE CODE File: kernel/clock.c 769
     next_timeout = clock_timers->tmr_exp_time;
 }
 /*===========================================================================*
-*                       reset_timer 重新设置_时间者 *
+*                       reset_timer 重新设置_定时器 *
 *===========================================================================*/
 PUBLIC void reset_timer(tp)
 struct timer *tp; /* pointer to timer structure */

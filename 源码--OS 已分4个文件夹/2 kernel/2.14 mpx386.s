@@ -51,7 +51,6 @@ begtext:
 .sect .rom
 begrom:
 .sect .data
-708 File: kernel/mpx386.s MINIX SOURCE CODE
 begdata:
 .sect .bss
 begbss:
@@ -112,7 +111,6 @@ begbss:
 
 .define _s_call
 .define _p_s_call
-MINIX SOURCE CODE File: kernel/mpx386.s 709
 .define _level0_call
 
 ! Exported variables.
@@ -173,7 +171,6 @@ mov eax, 16(ebp) ! address of a.out headers
 mov (_aout), eax
 mov ax, ds ! kernel data
 mov es, ax
-710 File: kernel/mpx386.s MINIX SOURCE CODE
 mov fs, ax
 mov gs, ax
 mov ss, ax
@@ -356,7 +353,6 @@ jmp RETADR-P_STACKBASE(eax)
 !*===========================================================================*
 .align 16
 _s_call:
-MINIX SOURCE CODE File: kernel/mpx386.s 713
 _p_s_call:
 cld ! set direction flag to a known value
 sub esp, 6*4 ! skip RETADR, eax, ecx, edx, ebx, est
@@ -417,7 +413,6 @@ iretd ! continue process
 _divide_error:
 push DIVIDE_VECTOR
 jmp exception
-714 File: kernel/mpx386.s MINIX SOURCE CODE
 
 _single_step_exception:
 push DEBUG_VECTOR
@@ -478,7 +473,6 @@ jmp errexception
 _copr_error:
 push COPROC_ERR_VECTOR
 jmp exception
-MINIX SOURCE CODE File: kernel/mpx386.s 715
 
 !*===========================================================================*
 !* exception *
@@ -539,7 +533,6 @@ k_stack:
 .space K_STACK_BYTES ! kernel stack
 k_stktop: ! top of kernel stack
 .comm ex_number, 4
-716 File: kernel/mpx386.s MINIX SOURCE CODE
 .comm trap_errno, 4
 .comm old_eip, 4
 .comm old_cs, 4

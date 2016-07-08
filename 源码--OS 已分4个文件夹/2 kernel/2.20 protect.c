@@ -14,48 +14,47 @@
 #define TSS_TYPE (AVL_286_TSS | DESC_386_BIT)
 
 struct desctableptr_s {
-char limit[sizeof(u16_t)];
-char base[sizeof(u32_t)]; /* really u24_t + pad for 286 */
+    char limit[sizeof(u16_t)];
+    char base[sizeof(u32_t)]; /* really u24_t + pad for 286 */
 };
 
 struct gatedesc_s {
-u16_t offset_low;
-u16_t selector;
-u8_t pad; /* |000|XXXXX| ig & trpg, |XXXXXXXX| task g */
-u8_t p_dpl_type; /* |P|DL|0|TYPE| */
-u16_t offset_high;
+    u16_t offset_low;
+    u16_t selector;
+    u8_t pad; /* |000|XXXXX| ig & trpg, |XXXXXXXX| task g */
+    u8_t p_dpl_type; /* |P|DL|0|TYPE| */
+    u16_t offset_high;
 };
 
 struct tss_s {
-reg_t backlink;
-reg_t sp0; /* stack pointer to use during interrupt */
-reg_t ss0; /* " segment " " " " */
-reg_t sp1;
-reg_t ss1;
-reg_t sp2;
-reg_t ss2;
-reg_t cr3;
-reg_t ip;
-reg_t flags;
-reg_t ax;
-reg_t cx;
-reg_t dx;
-reg_t bx;
-MINIX SOURCE CODE File: kernel/protect.c 737
-reg_t sp;
-reg_t bp;
-reg_t si;
-reg_t di;
-reg_t es;
-reg_t cs;
-reg_t ss;
-reg_t ds;
-reg_t fs;
-reg_t gs;
-reg_t ldt;
-u16_t trap;
-u16_t iobase;
-/* u8_t iomap[0]; */
+    reg_t backlink;
+    reg_t sp0; /* stack pointer to use during interrupt */
+    reg_t ss0; /* " segment " " " " */
+    reg_t sp1;
+    reg_t ss1;
+    reg_t sp2;
+    reg_t ss2;
+    reg_t cr3;
+    reg_t ip;
+    reg_t flags;
+    reg_t ax;
+    reg_t cx;
+    reg_t dx;
+    reg_t bx;
+    reg_t sp;
+    reg_t bp;
+    reg_t si;
+    reg_t di;
+    reg_t es;
+    reg_t cs;
+    reg_t ss;
+    reg_t ds;
+    reg_t fs;
+    reg_t gs;
+    reg_t ldt;
+    u16_t trap;
+    u16_t iobase;
+    /* u8_t iomap[0]; */
 };
 
 PUBLIC struct segdesc_s gdt[GDT_SIZE]; /* used in klib.s and mpx.s */

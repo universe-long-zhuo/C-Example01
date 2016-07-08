@@ -14,12 +14,12 @@
 #include "fproc.h"
 #include "inode.h"
 
-// get_fd    获取_?
-// get_filp  获取_?
-// find_filp 查找_?
+// get_fd    获取_文件描述符？
+// get_filp  获取_文件节点？
+// find_filp 查找_文件节点？
 
 /*===========================================================================*
-*                       get_fd 获取_？                                *
+*                       get_fd 获取_文件描述符？                                *
 *===========================================================================*/
 PUBLIC int get_fd(int start, mode_t bits, int *k, struct filp **fpt)
 {

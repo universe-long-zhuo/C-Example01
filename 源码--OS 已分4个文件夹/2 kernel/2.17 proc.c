@@ -86,7 +86,7 @@ cp_mess(s, (sp)->p_memmap[D].mem_phys, \
 // enqueue      队列
 // dequeue      散队
 // sched        调度
-// pick_proc
+// pick_proc  选择_进程
 // lock_send    锁_发送
 // lock_enqueue 锁_队列
 // lock_dequeue 锁_散队

@@ -27,7 +27,7 @@ FORWARD _PROTOTYPE( int change_into, (struct inode **iip, struct inode *ip));
 FORWARD _PROTOTYPE( int stat_inode, (struct inode *rip, struct filp *fil_ptr,
 char *user_addr) );
 
-
+// do_fchdir 文件改变目录？
 
 /*===========================================================================*
 *                        do_fchdir 改变当前工作目录 *

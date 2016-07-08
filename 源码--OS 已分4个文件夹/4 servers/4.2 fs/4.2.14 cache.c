@@ -22,7 +22,7 @@
 #include "fproc.h"
 #include "super.h"
 
-FORWARD _PROTOTYPE( void rm_lru, (struct buf *bp) ); /* bp是什么？ */
+FORWARD _PROTOTYPE( void rm_lru, (struct buf *bp) ); /* bp是Block Pointer？ */
 
 /*===========================================================================*
 *                       get_block  获取_块                                   * 
