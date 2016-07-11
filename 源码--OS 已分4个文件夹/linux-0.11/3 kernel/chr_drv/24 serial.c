@@ -23,6 +23,9 @@
 extern void rs1_interrupt(void);
 extern void rs2_interrupt(void);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void init(int port)
 {
 	outb_p(0x80,port+3);	/* set DLAB of line control reg */
@@ -34,6 +37,9 @@ static void init(int port)
 	(void)inb(port);	/* read data port to reset things (?) */
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void rs_init(void)
 {
 	set_intr_gate(0x24,rs1_interrupt);
@@ -43,6 +49,9 @@ void rs_init(void)
 	outb(inb_p(0x21)&0xE7,0x21);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This routine gets called when tty_write has put something into
  * the write_queue. It must check wheter the queue is empty, and

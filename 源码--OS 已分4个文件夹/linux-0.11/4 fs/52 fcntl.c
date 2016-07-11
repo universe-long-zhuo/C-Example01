@@ -15,6 +15,9 @@
 
 extern int sys_close(int fd);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int dupfd(unsigned int fd, unsigned int arg)
 {
 	if (fd >= NR_OPEN || !current->filp[fd])
@@ -33,17 +36,26 @@ static int dupfd(unsigned int fd, unsigned int arg)
 	return arg;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_dup2(unsigned int oldfd, unsigned int newfd)
 {
 	sys_close(newfd);
 	return dupfd(oldfd,newfd);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_dup(unsigned int fildes)
 {
 	return dupfd(fildes,0);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_fcntl(unsigned int fd, unsigned int cmd, unsigned long arg)
 {	
 	struct file * filp;

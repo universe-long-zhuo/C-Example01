@@ -69,6 +69,9 @@ static unsigned char reply_buffer[MAX_REPLIES];
 #define ST2 (reply_buffer[2])
 #define ST3 (reply_buffer[3])
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This struct defines the different floppy types. Unlike minix
  * linux doesn't have a "search for right type"-type, as the code
@@ -122,6 +125,9 @@ static unsigned char command = 0;
 unsigned char selected = 0;
 struct task_struct * wait_on_floppy_select = NULL;
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void floppy_deselect(unsigned int nr)
 {
 	if (nr != (current_DOR & 3))
@@ -130,6 +136,9 @@ void floppy_deselect(unsigned int nr)
 	wake_up(&wait_on_floppy_select);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * floppy-change is never called from an interrupt, so we can relax a bit
  * here, sleep etc. Note that floppy-on tries to set current_DOR to point
@@ -157,6 +166,9 @@ __asm__("cld ; rep ; movsl" \
 	::"c" (BLOCK_SIZE/4),"S" ((long)(from)),"D" ((long)(to)) \
 	:"cx","di","si")
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void setup_DMA(void)
 {
 	long addr = (long) CURRENT->buffer;
@@ -191,6 +203,9 @@ static void setup_DMA(void)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void output_byte(char byte)
 {
 	int counter;
@@ -209,6 +224,9 @@ static void output_byte(char byte)
 	printk("Unable to send byte to FDC\n\r");
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int result(void)
 {
 	int i = 0, counter, status;
@@ -230,6 +248,9 @@ static int result(void)
 	return -1;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void bad_flp_intr(void)
 {
 	CURRENT->errors++;
@@ -243,6 +264,9 @@ static void bad_flp_intr(void)
 		recalibrate = 1;
 }	
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Ok, this interrupt is called after a DMA read/write has succeeded,
  * so we check the results, and copy any buffers.
@@ -266,6 +290,9 @@ static void rw_interrupt(void)
 	do_fd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 inline void setup_rw_floppy(void)
 {
 	setup_DMA();
@@ -283,6 +310,9 @@ inline void setup_rw_floppy(void)
 		do_fd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This is the routine called after every seek (or recalibrate) interrupt
  * from the floppy controller. Note that the "unexpected interrupt" routine
@@ -301,6 +331,9 @@ static void seek_interrupt(void)
 	setup_rw_floppy();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This routine is called when everything should be correctly set up
  * for the transfer (ie floppy motor is on and the correct floppy is
@@ -337,6 +370,9 @@ static void transfer(void)
 		do_fd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Special case - used after a unexpected interrupt (or reset)
  */
@@ -350,6 +386,9 @@ static void recal_interrupt(void)
 	do_fd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void unexpected_floppy_interrupt(void)
 {
 	output_byte(FD_SENSEI);
@@ -359,6 +398,9 @@ void unexpected_floppy_interrupt(void)
 		recalibrate = 1;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void recalibrate_floppy(void)
 {
 	recalibrate = 0;
@@ -370,6 +412,9 @@ static void recalibrate_floppy(void)
 		do_fd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void reset_interrupt(void)
 {
 	output_byte(FD_SENSEI);
@@ -380,6 +425,9 @@ static void reset_interrupt(void)
 	do_fd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * reset is done by pulling bit 2 of DOR low for a while.
  */
@@ -401,6 +449,9 @@ static void reset_floppy(void)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void floppy_on_interrupt(void)
 {
 /* We cannot do a floppy-select, as that might sleep. We just force it */
@@ -414,6 +465,9 @@ static void floppy_on_interrupt(void)
 		transfer();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void do_fd_request(void)
 {
 	unsigned int block;
@@ -454,6 +508,9 @@ void do_fd_request(void)
 	add_timer(ticks_to_floppy_on(current_drive),&floppy_on_interrupt);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void floppy_init(void)
 {
 	blk_dev[MAJOR_NR].request_fn = DEVICE_REQUEST;

@@ -23,6 +23,9 @@
 #define _S(nr) (1<<((nr)-1))
 #define _BLOCKABLE (~(_S(SIGKILL) | _S(SIGSTOP)))
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void show_task(int nr,struct task_struct * p)
 {
 	int i,j = 4096-sizeof(struct task_struct);
@@ -34,6 +37,9 @@ void show_task(int nr,struct task_struct * p)
 	printk("%d (of %d) chars free in kernel stack\n\r",i,j);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void show_stat(void)
 {
 	int i;
@@ -50,6 +56,9 @@ extern void mem_use(void);
 extern int timer_interrupt(void);
 extern int system_call(void);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 union task_union {
 	struct task_struct task;
 	char stack[PAGE_SIZE];
@@ -66,10 +75,17 @@ struct task_struct * task[NR_TASKS] = {&(init_task.task), };
 
 long user_stack [ PAGE_SIZE>>2 ] ;
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 struct {
 	long * a;
 	short b;
 	} stack_start = { & user_stack [PAGE_SIZE>>2] , 0x10 };
+
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  *  'math_state_restore()' saves the current math information in the
  * old math state array, and gets the new ones from the current task
@@ -91,6 +107,9 @@ void math_state_restore()
 	}
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  *  'schedule()' is the scheduler function. This is GOOD CODE! There
  * probably won't be any reason to change this, as it should work well
@@ -106,7 +125,7 @@ void schedule(void)
 	int i,next,c;
 	struct task_struct ** p;
 
-/* check alarm, wake up any interruptible tasks that have got a signal */
+    /* check alarm, wake up any interruptible tasks that have got a signal */
 
 	for(p = &LAST_TASK ; p > &FIRST_TASK ; --p)
 		if (*p) {
@@ -119,7 +138,7 @@ void schedule(void)
 				(*p)->state=TASK_RUNNING;
 		}
 
-/* this is the scheduler proper: */
+    /* this is the scheduler proper: */
 
 	while (1) {
 		c = -1;
@@ -141,6 +160,9 @@ void schedule(void)
 	switch_to(next);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_pause(void)
 {
 	current->state = TASK_INTERRUPTIBLE;
@@ -148,6 +170,9 @@ int sys_pause(void)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void sleep_on(struct task_struct **p)
 {
 	struct task_struct *tmp;
@@ -164,6 +189,9 @@ void sleep_on(struct task_struct **p)
 		tmp->state=0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void interruptible_sleep_on(struct task_struct **p)
 {
 	struct task_struct *tmp;
@@ -193,6 +221,9 @@ void wake_up(struct task_struct **p)
 	}
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * OK, here are some floppy things that shouldn't be in the kernel
  * proper. They are here because the floppy needs a timer, and this
@@ -229,6 +260,9 @@ int ticks_to_floppy_on(unsigned int nr)
 	return mon_timer[nr];
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void floppy_on(unsigned int nr)
 {
 	cli();
@@ -237,11 +271,17 @@ void floppy_on(unsigned int nr)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void floppy_off(unsigned int nr)
 {
 	moff_timer[nr]=3*HZ;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void do_floppy_timer(void)
 {
 	int i;
@@ -263,12 +303,18 @@ void do_floppy_timer(void)
 
 #define TIME_REQUESTS 64
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static struct timer_list {
 	long jiffies;
 	void (*fn)();
 	struct timer_list * next;
 } timer_list[TIME_REQUESTS], * next_timer = NULL;
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void add_timer(long jiffies, void (*fn)(void))
 {
 	struct timer_list * p;
@@ -302,6 +348,9 @@ void add_timer(long jiffies, void (*fn)(void))
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void do_timer(long cpl)
 {
 	extern int beepcount;
@@ -335,6 +384,9 @@ void do_timer(long cpl)
 	schedule();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_alarm(long seconds)
 {
 	int old = current->alarm;
@@ -345,36 +397,57 @@ int sys_alarm(long seconds)
 	return (old);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_getpid(void)
 {
 	return current->pid;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_getppid(void)
 {
 	return current->father;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_getuid(void)
 {
 	return current->uid;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_geteuid(void)
 {
 	return current->euid;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_getgid(void)
 {
 	return current->gid;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_getegid(void)
 {
 	return current->egid;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_nice(long increment)
 {
 	if (current->priority-increment>0)
@@ -382,6 +455,9 @@ int sys_nice(long increment)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void sched_init(void)
 {
 	int i;
@@ -399,7 +475,7 @@ void sched_init(void)
 		p->a=p->b=0;
 		p++;
 	}
-/* Clear NT, so that we won't have troubles with that later on */
+    /* Clear NT, so that we won't have troubles with that later on */
 	__asm__("pushfl ; andl $0xffffbfff,(%esp) ; popfl");
 	ltr(0);
 	lldt(0);

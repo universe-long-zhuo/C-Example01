@@ -67,6 +67,9 @@ __asm__("cld;rep;outsw"::"d" (port),"S" (buf),"c" (nr):"cx","si")
 extern void hd_interrupt(void);
 extern void rd_load(void);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /* This may be used only once, enforced by 'static int callable' */
 int sys_setup(void * BIOS)
 {
@@ -158,6 +161,9 @@ int sys_setup(void * BIOS)
 	return (0);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int controller_ready(void)
 {
 	int retries=10000;
@@ -166,6 +172,9 @@ static int controller_ready(void)
 	return (retries);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int win_result(void)
 {
 	int i=inb_p(HD_STATUS);
@@ -177,6 +186,9 @@ static int win_result(void)
 	return (1);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void hd_out(unsigned int drive,unsigned int nsect,unsigned int sect,
 		unsigned int head,unsigned int cyl,unsigned int cmd,
 		void (*intr_addr)(void))
@@ -199,6 +211,9 @@ static void hd_out(unsigned int drive,unsigned int nsect,unsigned int sect,
 	outb(cmd,++port);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int drive_busy(void)
 {
 	unsigned int i;
@@ -214,6 +229,9 @@ static int drive_busy(void)
 	return(1);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void reset_controller(void)
 {
 	int	i;
@@ -227,6 +245,9 @@ static void reset_controller(void)
 		printk("HD-controller reset failed: %02x\n\r",i);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void reset_hd(int nr)
 {
 	reset_controller();
@@ -234,11 +255,17 @@ static void reset_hd(int nr)
 		hd_info[nr].cyl,WIN_SPECIFY,&recal_intr);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void unexpected_hd_interrupt(void)
 {
 	printk("Unexpected HD interrupt\n\r");
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void bad_rw_intr(void)
 {
 	if (++CURRENT->errors >= MAX_ERRORS)
@@ -247,6 +274,9 @@ static void bad_rw_intr(void)
 		reset = 1;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void read_intr(void)
 {
 	if (win_result()) {
@@ -266,6 +296,9 @@ static void read_intr(void)
 	do_hd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void write_intr(void)
 {
 	if (win_result()) {
@@ -284,6 +317,9 @@ static void write_intr(void)
 	do_hd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void recal_intr(void)
 {
 	if (win_result())
@@ -291,6 +327,9 @@ static void recal_intr(void)
 	do_hd_request();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void do_hd_request(void)
 {
 	int i,r;
@@ -340,6 +379,9 @@ void do_hd_request(void)
 		panic("unknown hd-command");
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void hd_init(void)
 {
 	blk_dev[MAJOR_NR].request_fn = DEVICE_REQUEST;

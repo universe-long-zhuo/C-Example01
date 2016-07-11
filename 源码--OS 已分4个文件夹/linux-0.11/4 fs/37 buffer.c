@@ -33,6 +33,9 @@ static struct buffer_head * free_list;
 static struct task_struct * buffer_wait = NULL;
 int NR_BUFFERS = 0;
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline void wait_on_buffer(struct buffer_head * bh)
 {
 	cli();
@@ -41,6 +44,9 @@ static inline void wait_on_buffer(struct buffer_head * bh)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_sync(void)
 {
 	int i;
@@ -56,6 +62,9 @@ int sys_sync(void)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sync_dev(int dev)
 {
 	int i;
@@ -81,6 +90,9 @@ int sync_dev(int dev)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void inline invalidate_buffers(int dev)
 {
 	int i;
@@ -96,6 +108,9 @@ void inline invalidate_buffers(int dev)
 	}
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This routine checks whether a floppy has been changed, and
  * invalidates all buffer-cache-entries in that case. This
@@ -128,6 +143,9 @@ void check_disk_change(int dev)
 #define _hashfn(dev,block) (((unsigned)(dev^block))%NR_HASH)
 #define hash(dev,block) hash_table[_hashfn(dev,block)]
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline void remove_from_queues(struct buffer_head * bh)
 {
 /* remove from hash-queue */
@@ -137,7 +155,7 @@ static inline void remove_from_queues(struct buffer_head * bh)
 		bh->b_prev->b_next = bh->b_next;
 	if (hash(bh->b_dev,bh->b_blocknr) == bh)
 		hash(bh->b_dev,bh->b_blocknr) = bh->b_next;
-/* remove from free list */
+    /* remove from free list */
 	if (!(bh->b_prev_free) || !(bh->b_next_free))
 		panic("Free block list corrupted");
 	bh->b_prev_free->b_next_free = bh->b_next_free;
@@ -146,6 +164,9 @@ static inline void remove_from_queues(struct buffer_head * bh)
 		free_list = bh->b_next_free;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline void insert_into_queues(struct buffer_head * bh)
 {
 /* put at end of free list */
@@ -153,7 +174,7 @@ static inline void insert_into_queues(struct buffer_head * bh)
 	bh->b_prev_free = free_list->b_prev_free;
 	free_list->b_prev_free->b_next_free = bh;
 	free_list->b_prev_free = bh;
-/* put the buffer in new hash-queue if it has a device */
+    /* put the buffer in new hash-queue if it has a device */
 	bh->b_prev = NULL;
 	bh->b_next = NULL;
 	if (!bh->b_dev)
@@ -163,6 +184,9 @@ static inline void insert_into_queues(struct buffer_head * bh)
 	bh->b_next->b_prev = bh;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static struct buffer_head * find_buffer(int dev, int block)
 {		
 	struct buffer_head * tmp;
@@ -173,6 +197,9 @@ static struct buffer_head * find_buffer(int dev, int block)
 	return NULL;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Why like this, I hear you say... The reason is race-conditions.
  * As we don't lock buffers (unless we are readint them, that is),
@@ -195,6 +222,9 @@ struct buffer_head * get_hash_table(int dev, int block)
 	}
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Ok, this is getblk, and it isn't very clear, again to hinder
  * race-conditions. Most of the code is seldom used, (ie repeating),
@@ -250,6 +280,9 @@ repeat:
 	return bh;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void brelse(struct buffer_head * buf)
 {
 	if (!buf)
@@ -260,6 +293,9 @@ void brelse(struct buffer_head * buf)
 	wake_up(&buffer_wait);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * bread() reads a specified block and returns the buffer that contains
  * it. It returns NULL if the block was unreadable.
@@ -287,6 +323,9 @@ __asm__("cld\n\t" \
 	::"c" (BLOCK_SIZE/4),"S" (from),"D" (to) \
 	:"cx","di","si")
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * bread_page reads four buffers into memory at the desired address. It's
  * a function of its own, as there is some speed to be got by reading them
@@ -314,6 +353,9 @@ void bread_page(unsigned long address,int dev,int b[4])
 		}
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Ok, breada can be used as bread, but additionally to mark other
  * blocks for reading as well. End the argument list with a negative
@@ -345,6 +387,9 @@ struct buffer_head * breada(int dev,int first, ...)
 	return (NULL);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void buffer_init(long buffer_end)
 {
 	struct buffer_head * h = start_buffer;

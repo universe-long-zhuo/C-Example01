@@ -30,6 +30,9 @@
 
 volatile void do_exit(long code);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline volatile void oom(void)
 {
 	printk("out of memory\n\r");
@@ -82,6 +85,9 @@ __asm__("std ; repne ; scasb\n\t"
 return __res;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Free a page of memory at physical address 'addr'. Used by
  * 'free_page_tables()'
@@ -98,6 +104,9 @@ void free_page(unsigned long addr)
 	panic("trying to free free page");
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This function frees a continuos block of page tables, as needed
  * by 'exit()'. As does copy_page_tables(), this handles only 4Mb blocks.
@@ -130,6 +139,9 @@ int free_page_tables(unsigned long from,unsigned long size)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  *  Well, here is one of the most complicated functions in mm. It
  * copies a range of linerar addresses by copying only the pages.
@@ -188,6 +200,9 @@ int copy_page_tables(unsigned long from,unsigned long to,long size)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This function puts a page in memory at the wanted address.
  * It returns the physical address of the page gotten, 0 if
@@ -218,6 +233,9 @@ unsigned long put_page(unsigned long page,unsigned long address)
 	return page;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void un_wp_page(unsigned long * table_entry)
 {
 	unsigned long old_page,new_page;
@@ -237,6 +255,9 @@ void un_wp_page(unsigned long * table_entry)
 	copy_page(old_page,new_page);
 }	
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This routine handles present pages, when users try to write
  * to a shared page. It is done by copying the page to a new address
@@ -258,6 +279,9 @@ void do_wp_page(unsigned long error_code,unsigned long address)
 
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void write_verify(unsigned long address)
 {
 	unsigned long page;
@@ -271,6 +295,9 @@ void write_verify(unsigned long address)
 	return;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void get_empty_page(unsigned long address)
 {
 	unsigned long tmp;
@@ -281,6 +308,9 @@ void get_empty_page(unsigned long address)
 	}
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * try_to_share() checks the page at address "address" in the task "p",
  * to see if it exists, and if it is clean. If so, share it with the current
@@ -333,6 +363,9 @@ static int try_to_share(unsigned long address, struct task_struct * p)
 	return 1;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * share_page() tries to find a process that could share a page with
  * the current one. Address is the address of the wanted page relative
@@ -362,6 +395,9 @@ static int share_page(unsigned long address)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void do_no_page(unsigned long error_code,unsigned long address)
 {
 	int nr[4];
@@ -396,6 +432,9 @@ void do_no_page(unsigned long error_code,unsigned long address)
 	oom();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void mem_init(long start_mem, long end_mem)
 {
 	int i;
@@ -410,6 +449,9 @@ void mem_init(long start_mem, long end_mem)
 		mem_map[i++]=0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void calc_mem(void)
 {
 	int i,j,k,free=0;

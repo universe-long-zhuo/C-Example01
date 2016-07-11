@@ -11,6 +11,9 @@
 #include <asm/segment.h>
 #include <asm/system.h>
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int block_write(int dev, long * pos, char * buf, int count)
 {
 	int block = *pos >> BLOCK_SIZE_BITS;
@@ -44,6 +47,9 @@ int block_write(int dev, long * pos, char * buf, int count)
 	return written;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int block_read(int dev, unsigned long * pos, char * buf, int count)
 {
 	int block = *pos >> BLOCK_SIZE_BITS;

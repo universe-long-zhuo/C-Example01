@@ -67,8 +67,8 @@ extern long startup_time;
  */
 
 #define CMOS_READ(addr) ({ \
-outb_p(0x80|addr,0x70); \
-inb_p(0x71); \
+    outb_p(0x80|addr,0x70); \
+    inb_p(0x71); \
 })
 
 #define BCD_TO_BIN(val) ((val)=((val)&15) + ((val)>>4)*10)
@@ -101,6 +101,9 @@ static long main_memory_start = 0;
 
 struct drive_info { char dummy[32]; } drive_info;
 
+/*===========================================================================*
+*                       main *
+*===========================================================================*/
 void main(void)		/* This really IS void, no error here. */
 {			/* The startup routine assumes (well, ...) this */
 /*
@@ -148,6 +151,9 @@ void main(void)		/* This really IS void, no error here. */
 	for(;;) pause();
 }
 
+/*===========================================================================*
+*                       printf *
+*===========================================================================*/
 static int printf(const char *fmt, ...)
 {
 	va_list args;
@@ -165,6 +171,9 @@ static char * envp_rc[] = { "HOME=/", NULL };
 static char * argv[] = { "-/bin/sh",NULL };
 static char * envp[] = { "HOME=/usr/root", NULL };
 
+/*===========================================================================*
+*                       init *
+*===========================================================================*/
 void init(void)
 {
 	int pid,i;

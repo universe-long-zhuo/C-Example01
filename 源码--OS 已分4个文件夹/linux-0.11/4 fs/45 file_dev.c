@@ -14,6 +14,9 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int file_read(struct m_inode * inode, struct file * filp, char * buf, int count)
 {
 	int left,chars,nr;
@@ -45,6 +48,9 @@ int file_read(struct m_inode * inode, struct file * filp, char * buf, int count)
 	return (count-left)?(count-left):-ERROR;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int file_write(struct m_inode * inode, struct file * filp, char * buf, int count)
 {
 	off_t pos;

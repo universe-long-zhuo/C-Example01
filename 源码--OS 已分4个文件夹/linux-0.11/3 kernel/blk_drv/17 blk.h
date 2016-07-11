@@ -14,6 +14,9 @@
  */
 #define NR_REQUEST	32
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Ok, this is an expanded form so that we can use the same
  * request for paging requests when that is implemented. In
@@ -98,6 +101,9 @@ void (*DEVICE_INTR)(void) = NULL;
 #endif
 static void (DEVICE_REQUEST)(void);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 extern inline void unlock_buffer(struct buffer_head * bh)
 {
 	if (!bh->b_lock)
@@ -106,6 +112,9 @@ extern inline void unlock_buffer(struct buffer_head * bh)
 	wake_up(&bh->b_wait);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 extern inline void end_request(int uptodate)
 {
 	DEVICE_OFF(CURRENT->dev);

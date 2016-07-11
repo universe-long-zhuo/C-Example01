@@ -16,6 +16,9 @@
 int sys_pause(void);
 int sys_close(int fd);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void release(struct task_struct * p)
 {
 	int i;
@@ -32,6 +35,9 @@ void release(struct task_struct * p)
 	panic("trying to release non-existent task");
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline int send_sig(long sig,struct task_struct * p,int priv)
 {
 	if (!p || sig<1 || sig>32)
@@ -43,6 +49,9 @@ static inline int send_sig(long sig,struct task_struct * p,int priv)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void kill_session(void)
 {
 	struct task_struct **p = NR_TASKS + task;
@@ -53,6 +62,9 @@ static void kill_session(void)
 	}
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * XXX need to check permissions needed to send signals to process
  * groups, etc. etc.  kill() permissions semantics are tricky!
@@ -80,6 +92,9 @@ int sys_kill(int pid,int sig)
 	return retval;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void tell_father(int pid)
 {
 	int i;
@@ -99,6 +114,9 @@ static void tell_father(int pid)
 	release(current);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int do_exit(long code)
 {
 	int i;
@@ -134,11 +152,17 @@ int do_exit(long code)
 	return (-1);	/* just to suppress warnings */
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_exit(int error_code)
 {
 	return do_exit((error_code&0xff)<<8);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_waitpid(pid_t pid,unsigned long * stat_addr, int options)
 {
 	int flag, code;

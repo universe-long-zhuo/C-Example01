@@ -15,12 +15,18 @@
 #include <asm/segment.h>
 #include <asm/system.h>
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static unsigned short quotient[] = {
 	0, 2304, 1536, 1047, 857,
 	768, 576, 384, 192, 96,
 	64, 48, 24, 12, 6, 3
 };
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void change_speed(struct tty_struct * tty)
 {
 	unsigned short port,quot;
@@ -36,6 +42,9 @@ static void change_speed(struct tty_struct * tty)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void flush(struct tty_queue * queue)
 {
 	cli();
@@ -43,16 +52,25 @@ static void flush(struct tty_queue * queue)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void wait_until_sent(struct tty_struct * tty)
 {
 	/* do nothing - not implemented */
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void send_break(struct tty_struct * tty)
 {
 	/* do nothing - not implemented */
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int get_termios(struct tty_struct * tty, struct termios * termios)
 {
 	int i;
@@ -63,6 +81,9 @@ static int get_termios(struct tty_struct * tty, struct termios * termios)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int set_termios(struct tty_struct * tty, struct termios * termios)
 {
 	int i;
@@ -73,6 +94,9 @@ static int set_termios(struct tty_struct * tty, struct termios * termios)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int get_termio(struct tty_struct * tty, struct termio * termio)
 {
 	int i;
@@ -91,6 +115,9 @@ static int get_termio(struct tty_struct * tty, struct termio * termio)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * This only works as the 386 is low-byt-first
  */
@@ -112,6 +139,9 @@ static int set_termio(struct tty_struct * tty, struct termio * termio)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int tty_ioctl(int dev, int cmd, int arg)
 {
 	struct tty_struct * tty;

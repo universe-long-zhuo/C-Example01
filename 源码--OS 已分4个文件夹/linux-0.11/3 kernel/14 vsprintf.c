@@ -15,6 +15,9 @@
 /* we use this so that we can do without the ctype library */
 #define is_digit(c)	((c) >= '0' && (c) <= '9')
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int skip_atoi(const char **s)
 {
 	int i=0;
@@ -89,6 +92,9 @@ static char * number(char * str, int num, int base, int size, int precision
 	return str;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int vsprintf(char *buf, const char *fmt, va_list args)
 {
 	int len;

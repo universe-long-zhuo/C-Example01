@@ -12,11 +12,17 @@
 
 volatile void do_exit(int error_code);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_sgetmask()
 {
 	return current->blocked;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_ssetmask(int newmask)
 {
 	int old=current->blocked;
@@ -25,6 +31,9 @@ int sys_ssetmask(int newmask)
 	return old;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline void save_old(char * from,char * to)
 {
 	int i;
@@ -37,6 +46,9 @@ static inline void save_old(char * from,char * to)
 	}
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline void get_new(char * from,char * to)
 {
 	int i;
@@ -45,6 +57,9 @@ static inline void get_new(char * from,char * to)
 		*(to++) = get_fs_byte(from++);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_signal(int signum, long handler, long restorer)
 {
 	struct sigaction tmp;
@@ -60,6 +75,9 @@ int sys_signal(int signum, long handler, long restorer)
 	return handler;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_sigaction(int signum, const struct sigaction * action,
 	struct sigaction * oldaction)
 {
@@ -79,6 +97,9 @@ int sys_sigaction(int signum, const struct sigaction * action,
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void do_signal(long signr,long eax, long ebx, long ecx, long edx,
 	long fs, long es, long ds,
 	long eip, long cs, long eflags,

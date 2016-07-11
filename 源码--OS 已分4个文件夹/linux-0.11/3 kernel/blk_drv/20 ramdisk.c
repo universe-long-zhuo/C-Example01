@@ -20,6 +20,9 @@
 char	*rd_start;
 int	rd_length = 0;
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void do_rd_request(void)
 {
 	int	len;
@@ -46,6 +49,9 @@ void do_rd_request(void)
 	goto repeat;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Returns amount of memory which needs to be reserved.
  */
@@ -63,6 +69,9 @@ long rd_init(long mem_start, int length)
 	return(length);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * If the root device is the ram disk, try to load it.
  * In order to do this, the root device is originally set to the

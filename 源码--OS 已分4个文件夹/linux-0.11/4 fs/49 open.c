@@ -16,11 +16,17 @@
 #include <linux/kernel.h>
 #include <asm/segment.h>
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_ustat(int dev, struct ustat * ubuf)
 {
 	return -ENOSYS;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_utime(char * filename, struct utimbuf * times)
 {
 	struct m_inode * inode;
@@ -40,6 +46,9 @@ int sys_utime(char * filename, struct utimbuf * times)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * XXX should we use the real or effective uid?  BSD uses the real uid,
  * so as to make this call useful to setuid programs.
@@ -72,6 +81,9 @@ int sys_access(const char * filename,int mode)
 	return -EACCES;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_chdir(const char * filename)
 {
 	struct m_inode * inode;
@@ -87,6 +99,9 @@ int sys_chdir(const char * filename)
 	return (0);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_chroot(const char * filename)
 {
 	struct m_inode * inode;
@@ -102,6 +117,9 @@ int sys_chroot(const char * filename)
 	return (0);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_chmod(const char * filename,int mode)
 {
 	struct m_inode * inode;
@@ -118,6 +136,9 @@ int sys_chmod(const char * filename,int mode)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_chown(const char * filename,int uid,int gid)
 {
 	struct m_inode * inode;
@@ -135,6 +156,9 @@ int sys_chown(const char * filename,int uid,int gid)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_open(const char * filename,int flag,int mode)
 {
 	struct m_inode * inode;
@@ -184,11 +208,17 @@ int sys_open(const char * filename,int flag,int mode)
 	return (fd);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_creat(const char * pathname, int mode)
 {
 	return sys_open(pathname, O_CREAT | O_TRUNC, mode);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_close(unsigned int fd)
 {	
 	struct file * filp;

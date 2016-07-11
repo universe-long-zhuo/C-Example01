@@ -25,6 +25,9 @@ struct request request[NR_REQUEST];
  */
 struct task_struct * wait_for_request = NULL;
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /* blk_dev_struct is:
  *	do_request-address
  *	next-request
@@ -39,6 +42,9 @@ struct blk_dev_struct blk_dev[NR_BLK_DEV] = {
 	{ NULL, NULL }		/* dev lp */
 };
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline void lock_buffer(struct buffer_head * bh)
 {
 	cli();
@@ -48,6 +54,9 @@ static inline void lock_buffer(struct buffer_head * bh)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static inline void unlock_buffer(struct buffer_head * bh)
 {
 	if (!bh->b_lock)
@@ -56,6 +65,9 @@ static inline void unlock_buffer(struct buffer_head * bh)
 	wake_up(&bh->b_wait);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * add-request adds a request to the linked list.
  * It disables interrupts so that it can muck with the
@@ -85,6 +97,9 @@ static void add_request(struct blk_dev_struct * dev, struct request * req)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void make_request(int major,int rw, struct buffer_head * bh)
 {
 	struct request * req;
@@ -142,6 +157,9 @@ repeat:
 	add_request(major+blk_dev,req);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void ll_rw_block(int rw, struct buffer_head * bh)
 {
 	unsigned int major;
@@ -154,6 +172,9 @@ void ll_rw_block(int rw, struct buffer_head * bh)
 	make_request(major,rw,bh);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void blk_dev_init(void)
 {
 	int i;

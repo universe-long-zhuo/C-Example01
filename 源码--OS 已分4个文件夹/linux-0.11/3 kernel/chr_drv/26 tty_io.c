@@ -48,6 +48,9 @@
 #define O_NLRET(tty)	_O_FLAG((tty),ONLRET)
 #define O_LCUC(tty)	_O_FLAG((tty),OLCUC)
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 struct tty_struct tty_table[] = {
 	{
 		{ICRNL,		/* change incoming CR to NL */
@@ -102,12 +105,18 @@ struct tty_queue * table_list[]={
 	&tty_table[2].read_q, &tty_table[2].write_q
 	};
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void tty_init(void)
 {
 	rs_init();
 	con_init();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void tty_intr(struct tty_struct * tty, int mask)
 {
 	int i;
@@ -119,6 +128,9 @@ void tty_intr(struct tty_struct * tty, int mask)
 			task[i]->signal |= mask;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void sleep_if_empty(struct tty_queue * queue)
 {
 	cli();
@@ -127,6 +139,9 @@ static void sleep_if_empty(struct tty_queue * queue)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void sleep_if_full(struct tty_queue * queue)
 {
 	if (!FULL(*queue))
@@ -137,11 +152,17 @@ static void sleep_if_full(struct tty_queue * queue)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void wait_for_keypress(void)
 {
 	sleep_if_empty(&tty_table[0].secondary);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void copy_to_cooked(struct tty_struct * tty)
 {
 	signed char c;
@@ -227,6 +248,9 @@ void copy_to_cooked(struct tty_struct * tty)
 	wake_up(&tty->secondary.proc_list);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int tty_read(unsigned channel, char * buf, int nr)
 {
 	struct tty_struct * tty;
@@ -287,6 +311,9 @@ int tty_read(unsigned channel, char * buf, int nr)
 	return (b-buf);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int tty_write(unsigned channel, char * buf, int nr)
 {
 	static cr_flag=0;
@@ -325,6 +352,9 @@ int tty_write(unsigned channel, char * buf, int nr)
 	return (b-buf);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * Jeh, sometimes I really like the 386.
  * This routine is called from an interrupt,
@@ -344,6 +374,9 @@ void do_tty_interrupt(int tty)
 	copy_to_cooked(tty_table+tty);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void chr_dev_init(void)
 {
 }

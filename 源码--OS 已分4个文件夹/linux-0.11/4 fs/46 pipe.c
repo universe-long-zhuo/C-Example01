@@ -10,6 +10,9 @@
 #include <linux/mm.h>	/* for get_free_page */
 #include <asm/segment.h>
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int read_pipe(struct m_inode * inode, char * buf, int count)
 {
 	int chars, size, read = 0;
@@ -37,7 +40,10 @@ int read_pipe(struct m_inode * inode, char * buf, int count)
 	wake_up(&inode->i_wait);
 	return read;
 }
-	
+
+/*===========================================================================*
+*                        *
+*===========================================================================*/	
 int write_pipe(struct m_inode * inode, char * buf, int count)
 {
 	int chars, size, written = 0;
@@ -68,6 +74,9 @@ int write_pipe(struct m_inode * inode, char * buf, int count)
 	return written;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_pipe(unsigned long * fildes)
 {
 	struct m_inode * inode;

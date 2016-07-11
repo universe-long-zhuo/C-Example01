@@ -18,12 +18,18 @@ extern int tty_write(unsigned minor,char * buf,int count);
 
 typedef (*crw_ptr)(int rw,unsigned minor,char * buf,int count,off_t * pos);
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int rw_ttyx(int rw,unsigned minor,char * buf,int count,off_t * pos)
 {
 	return ((rw==READ)?tty_read(minor,buf,count):
 		tty_write(minor,buf,count));
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int rw_tty(int rw,unsigned minor,char * buf,int count, off_t * pos)
 {
 	if (current->tty<0)
@@ -31,21 +37,33 @@ static int rw_tty(int rw,unsigned minor,char * buf,int count, off_t * pos)
 	return rw_ttyx(rw,current->tty,buf,count,pos);
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int rw_ram(int rw,char * buf, int count, off_t *pos)
 {
 	return -EIO;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int rw_mem(int rw,char * buf, int count, off_t * pos)
 {
 	return -EIO;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int rw_kmem(int rw,char * buf, int count, off_t * pos)
 {
 	return -EIO;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int rw_port(int rw,char * buf, int count, off_t * pos)
 {
 	int i=*pos;
@@ -62,6 +80,9 @@ static int rw_port(int rw,char * buf, int count, off_t * pos)
 	return i;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static int rw_memory(int rw, unsigned minor, char * buf, int count, off_t * pos)
 {
 	switch(minor) {
@@ -92,6 +113,9 @@ static crw_ptr crw_table[]={
 	NULL,		/* /dev/lp */
 	NULL};		/* unnamed pipes */
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int rw_char(int rw,int dev, char * buf, int count, off_t * pos)
 {
 	crw_ptr call_addr;

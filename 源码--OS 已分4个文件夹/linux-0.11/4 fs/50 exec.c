@@ -38,6 +38,9 @@ extern int sys_close(int fd);
  */
 #define MAX_ARG_PAGES 32
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * create_tables() parses the env- and arg-strings in new user
  * memory and creates the pointer tables from them, and puts their
@@ -69,6 +72,9 @@ static unsigned long * create_tables(char * p,int argc,int envc)
 	return sp;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * count() counts the number of arguments/envelopes
  */
@@ -84,6 +90,9 @@ static int count(char ** argv)
 	return i;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * 'copy_string()' copies argument/envelope strings from user
  * memory to free pages in kernel mem. These are in a format ready
@@ -151,6 +160,9 @@ static unsigned long copy_strings(int argc,char ** argv,unsigned long *page,
 	return p;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static unsigned long change_ldt(unsigned long text_size,unsigned long * page)
 {
 	unsigned long code_limit,data_limit,code_base,data_base;
@@ -176,6 +188,9 @@ static unsigned long change_ldt(unsigned long text_size,unsigned long * page)
 	return data_limit;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 /*
  * 'do_execve()' executes a new program.
  */

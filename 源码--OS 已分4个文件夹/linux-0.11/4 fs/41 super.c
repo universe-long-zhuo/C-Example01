@@ -28,6 +28,9 @@ struct super_block super_block[NR_SUPER];
 /* this is initialized in init/main.c */
 int ROOT_DEV = 0;
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void lock_super(struct super_block * sb)
 {
 	cli();
@@ -37,6 +40,9 @@ static void lock_super(struct super_block * sb)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void free_super(struct super_block * sb)
 {
 	cli();
@@ -45,6 +51,9 @@ static void free_super(struct super_block * sb)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static void wait_on_super(struct super_block * sb)
 {
 	cli();
@@ -53,6 +62,9 @@ static void wait_on_super(struct super_block * sb)
 	sti();
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 struct super_block * get_super(int dev)
 {
 	struct super_block * s;
@@ -71,6 +83,9 @@ struct super_block * get_super(int dev)
 	return NULL;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void put_super(int dev)
 {
 	struct super_block * sb;
@@ -97,6 +112,9 @@ void put_super(int dev)
 	return;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 static struct super_block * read_super(int dev)
 {
 	struct super_block * s;
@@ -164,6 +182,9 @@ static struct super_block * read_super(int dev)
 	return s;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_umount(char * dev_name)
 {
 	struct m_inode * inode;
@@ -197,6 +218,9 @@ int sys_umount(char * dev_name)
 	return 0;
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 int sys_mount(char * dev_name, char * dir_name, int rw_flag)
 {
 	struct m_inode * dev_i, * dir_i;
@@ -239,6 +263,9 @@ int sys_mount(char * dev_name, char * dir_name, int rw_flag)
 	return 0;			/* we do that in umount */
 }
 
+/*===========================================================================*
+*                        *
+*===========================================================================*/
 void mount_root(void)
 {
 	int i,free;
