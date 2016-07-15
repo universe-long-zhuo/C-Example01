@@ -261,7 +261,7 @@ PRIVATE struct driver w_dtab = {
 // ack_irqs                确定_中断  
 
 /*===========================================================================*
-*                       at_winchester_task *
+*                       1 at_winchester_task *
 *===========================================================================*/
 PUBLIC int main()
 {
@@ -271,7 +271,7 @@ PUBLIC int main()
     return(OK);
 }
 /*===========================================================================*
-*                       init_params *
+*                       2 init_params *
 *===========================================================================*/
 PRIVATE void init_params()
 {
@@ -342,24 +342,24 @@ PRIVATE void init_params()
 #define ATA_IF_NOTCOMPAT2 (1L << 2)
 
 /*===========================================================================*
-*                       init_drive *
+*                       3 init_drive *
 *===========================================================================*/
 PRIVATE void init_drive(struct wini *w int base_cmd int base_ctl int irq int ack ...
 {
-    w->state = 0;
-    w->w_status = 0;
-    w->base_cmd = base_cmd;
-    w->base_ctl = base_ctl;
-    w->irq = irq;
-    w->irq_mask = 1 << irq;
+    w->state        = 0;
+    w->w_status     = 0;
+    w->base_cmd     = base_cmd;
+    w->base_ctl     = base_ctl;
+    w->irq          = irq;
+    w->irq_mask     = 1 << irq;
     w->irq_need_ack = ack;
-    w->irq_hook_id = hook;
-    w->ldhpref = ldh_init(drive);
-    w->max_count = MAX_SECS << SECTOR_SHIFT;
-    w->lba48 = 0;
+    w->irq_hook_id  = hook;
+    w->ldhpref      = ldh_init(drive);
+    w->max_count    = MAX_SECS << SECTOR_SHIFT;
+    w->lba48        = 0;
 }
 /*===========================================================================*
-*                       init_params_pci 外设部件互连标准 *
+*                       4 init_params_pci 外设部件互连标准 *
 *===========================================================================*/
 PRIVATE void init_params_pci(int skip)
 {
@@ -370,79 +370,81 @@ PRIVATE void init_params_pci(int skip)
     wini[drive].state = IGNORING;
     for(r = pci_first_dev(&devind, &vid, &did);
     r!=0&&w_next_drive<MAX_DRIVES; r=pci_next_dev(&devind,&vid, &did)) {
-    int interface, irq, irq_hook;
-    /* Base class must be 01h (mass storage), subclass must
-    * be 01h (ATA).
-    */
-    if (pci_attr_r8(devind, PCI_BCR) != 0x01 ||
-    pci_attr_r8(devind, PCI_SCR) != 0x01) {
-        continue;
-    }
-    /* Found a controller.
-    * Programming interface register tells us more.
-    */
-    interface = pci_attr_r8(devind, PCI_PIFR);
-    irq = pci_attr_r8(devind, PCI_ILR);
-
-    /* Any non-compat drives? */
-    if (interface & (ATA_IF_NOTCOMPAT1 | ATA_IF_NOTCOMPAT2)) {
-        int s;
-        irq_hook = irq;
-        if (skip > 0) {
-            if(w_pci_debug)printf("atapci skipping contr. (remain %d)\n",skip);
-            skip--;
-            continue;
-        }
-        if ((s=sys_irqsetpolicy(irq, 0, &irq_hook)) != OK) {
-            printf("atapci: couldn’t set IRQ policy %d\n", irq);
-            continue;
-        }
-        if ((s=sys_irqenable(&irq_hook)) != OK) {
-            printf("atapci: couldn’t enable IRQ line %d\n", irq);
-            continue;
-        }
-    } else {
-        /* If not.. this is not the ata-pci controller we’re
-        * looking for.
+        int interface, irq, irq_hook;
+        /* Base class must be 01h (mass storage), subclass must
+        * be 01h (ATA).
         */
-        if (w_pci_debug) printf("atapci skipping compatability controller\n");
-        continue;
-    }
+        if (pci_attr_r8(devind, PCI_BCR) != 0x01 ||
+        pci_attr_r8(devind, PCI_SCR) != 0x01) {
+            continue;
+        }
+        /* Found a controller.
+        * Programming interface register tells us more.
+        */
+        interface = pci_attr_r8(devind, PCI_PIFR);
+        irq = pci_attr_r8(devind, PCI_ILR);
 
-    /* Primary channel not in compatability mode? */
-    if (interface & ATA_IF_NOTCOMPAT1) {
-        u32_t base_cmd, base_ctl;
-        base_cmd = pci_attr_r32(devind, PCI_BAR) & 0xffffffe0;
-        base_ctl = pci_attr_r32(devind, PCI_BAR_2) & 0xffffffe0;
-        if (base_cmd != REG_CMD_BASE0 && base_cmd != REG_CMD_BASE1) {
-            init_drive(&wini[w_next_drive],
-            base_cmd, base_ctl, irq, 1, irq_hook, 0);
-            init_drive(&wini[w_next_drive+1],
-            base_cmd, base_ctl, irq, 1, irq_hook, 1);
-            if (w_pci_debug)
-                printf("atapci %d: 0x%x 0x%x irq %d\n",devind,base_cmd,base_ctl,irq)
-        } else printf("atapci: ignored drives on pri, base: %x\n",base_cmd);
-    }
+        /* Any non-compat drives? */
+        if (interface & (ATA_IF_NOTCOMPAT1 | ATA_IF_NOTCOMPAT2)) {
+            int s;
+            irq_hook = irq;
+            if (skip > 0) {
+                if(w_pci_debug)printf("atapci skipping contr. (remain %d)\n",skip);
+                skip--;
+                continue;
+            }
+            if ((s=sys_irqsetpolicy(irq, 0, &irq_hook)) != OK) {
+                printf("atapci: couldn’t set IRQ policy %d\n", irq);
+                continue;
+            }
+            if ((s=sys_irqenable(&irq_hook)) != OK) {
+                printf("atapci: couldn’t enable IRQ line %d\n", irq);
+                continue;
+            }
+        } else {
+            /* If not.. this is not the ata-pci controller we’re
+            * looking for.
+            */
+            if (w_pci_debug) printf("atapci skipping compatability controller\n");
+            continue;
+        }
 
-    /* Secondary channel not in compatability mode? */
-    if (interface & ATA_IF_NOTCOMPAT2) {
-        u32_t base_cmd, base_ctl;
-        base_cmd = pci_attr_r32(devind, PCI_BAR_3) & 0xffffffe0;
-        base_ctl = pci_attr_r32(devind, PCI_BAR_4) & 0xffffffe0;
-        if (base_cmd != REG_CMD_BASE0 && base_cmd != REG_CMD_BASE1) {
-            init_drive(&wini[w_next_drive+2],
-            base_cmd, base_ctl, irq, 1, irq_hook, 2);
-            init_drive(&wini[w_next_drive+3],
-            base_cmd, base_ctl, irq, 1, irq_hook, 3);
-            if (w_pci_debug)
-                printf("atapci %d: 0x%x 0x%x irq %d\n",devind,base_cmd,base_ctl,irq);
-            } else printf("atapci: ignored drives on secondary %x\n", base_cmd);
+        /* Primary channel not in compatability mode? */
+        if (interface & ATA_IF_NOTCOMPAT1) {
+            u32_t base_cmd, base_ctl;
+            base_cmd = pci_attr_r32(devind, PCI_BAR) & 0xffffffe0;
+            base_ctl = pci_attr_r32(devind, PCI_BAR_2) & 0xffffffe0;
+            if (base_cmd != REG_CMD_BASE0 && base_cmd != REG_CMD_BASE1) {
+                init_drive(&wini[w_next_drive],
+                base_cmd, base_ctl, irq, 1, irq_hook, 0);
+                init_drive(&wini[w_next_drive+1],
+                base_cmd, base_ctl, irq, 1, irq_hook, 1);
+                if (w_pci_debug)
+                    printf("atapci %d: 0x%x 0x%x irq %d\n",devind,base_cmd,base_ctl,irq)
+            } else 
+			    printf("atapci: ignored drives on pri, base: %x\n",base_cmd);
+        }
+
+        /* Secondary channel not in compatability mode? */
+        if (interface & ATA_IF_NOTCOMPAT2) {
+            u32_t base_cmd, base_ctl;
+            base_cmd = pci_attr_r32(devind, PCI_BAR_3) & 0xffffffe0;
+            base_ctl = pci_attr_r32(devind, PCI_BAR_4) & 0xffffffe0;
+            if (base_cmd != REG_CMD_BASE0 && base_cmd != REG_CMD_BASE1) {
+                init_drive(&wini[w_next_drive+2],
+                base_cmd, base_ctl, irq, 1, irq_hook, 2);
+                init_drive(&wini[w_next_drive+3],
+                base_cmd, base_ctl, irq, 1, irq_hook, 3);
+                if (w_pci_debug)
+                    printf("atapci %d: 0x%x 0x%x irq %d\n",devind,base_cmd,base_ctl,irq);
+            } else 
+				printf("atapci: ignored drives on secondary %x\n", base_cmd);
         }
         w_next_drive += 4;
     }
 }
 /*===========================================================================*
-*                        w_do_open *
+*                        5 w_do_open *
 *===========================================================================*/
 PRIVATE int w_do_open(dp, m_ptr)
 struct driver *dp;
@@ -497,7 +499,7 @@ message *m_ptr;
     return(OK);
 }
 /*===========================================================================*
-*                       w_prepare *
+*                       6 w_prepare *
 *===========================================================================*/
 PRIVATE struct device *w_prepare(int device)
 {
@@ -510,8 +512,7 @@ PRIVATE struct device *w_prepare(int device)
         w_drive = device / DEV_PER_DRIVE; /* save drive number */
         w_wn = &wini[w_drive];
         w_dv = &w_wn->part[device % DEV_PER_DRIVE];
-    } else
-    if ((unsigned) (device -= MINOR_d0p0s0) < NR_SUBDEVS) {/*d[0-7]p[0-3]s[0-3]*/
+    } else if ((unsigned) (device -= MINOR_d0p0s0) < NR_SUBDEVS) {/*d[0-7]p[0-3]s[0-3]*/
         w_drive = device / SUB_PER_DRIVE;
         w_wn = &wini[w_drive];
         w_dv = &w_wn->subpart[device % SUB_PER_DRIVE];
@@ -522,7 +523,7 @@ PRIVATE struct device *w_prepare(int device)
     return(w_dv);
 }
 /*===========================================================================*
-*                       w_identify *
+*                       7 w_identify *
 *===========================================================================*/
 PRIVATE int w_identify()
 {
@@ -629,7 +630,7 @@ PRIVATE int w_identify()
     return(OK);
 }
 /*===========================================================================*
-*                       w_name *
+*                       8 w_name *
 *===========================================================================*/
 PRIVATE char *w_name()
 {
@@ -640,7 +641,7 @@ PRIVATE char *w_name()
     return name;
 }
 /*===========================================================================*
-*                       w_io_test *
+*                       9 w_io_test *
 *===========================================================================*/
 PRIVATE int w_io_test(void)
 {
@@ -692,7 +693,7 @@ PRIVATE int w_io_test(void)
 }
 
 /*===========================================================================*
-*                       w_specify *
+*                       10 w_specify *
 *===========================================================================*/
 PRIVATE int w_specify()
 {
@@ -730,7 +731,7 @@ PRIVATE int w_specify()
     return(OK);
 }
 /*===========================================================================*
-*                       do_transfer *
+*                       11 do_transfer *
 *===========================================================================*/
 PRIVATE int do_transfer(struct wini *wn, unsigned int precomp, unsigned int count,
 unsigned int sector, unsigned int opcode)
@@ -763,13 +764,13 @@ unsigned int sector, unsigned int opcode)
     return com_out(&cmd);
 }
 /*===========================================================================*
-*                       w_transfer *
+*                       12 w_transfer *
 *===========================================================================*/
 PRIVATE int w_transfer(proc_nr, opcode, position, iov, nr_req)
-int proc_nr; /* process doing the request */
-int opcode; /* DEV_GATHER or DEV_SCATTER */
-off_t position; /* offset on device to read or write */
-iovec_t *iov; /* pointer to read or write request vector */
+int proc_nr;     /* process doing the request */
+int opcode;      /* DEV_GATHER or DEV_SCATTER */
+off_t position;  /* offset on device to read or write */
+iovec_t *iov;    /* pointer to read or write request vector */
 unsigned nr_req; /* length of request vector */
 {
     struct wini *wn = w_wn;
@@ -861,7 +862,7 @@ unsigned nr_req; /* length of request vector */
     return(OK);
 }
 /*===========================================================================*
-*                       com_out *
+*                       13 com_out *
 *===========================================================================*/
 PRIVATE int com_out(cmd)
 struct command *cmd; /* Command block */
@@ -912,7 +913,7 @@ struct command *cmd; /* Command block */
     return(OK);
 }
 /*===========================================================================*
-*                       w_need_reset *
+*                       14 w_need_reset *
 *===========================================================================*/
 PRIVATE void w_need_reset()
 {
@@ -928,7 +929,7 @@ PRIVATE void w_need_reset()
     }
 }
 /*===========================================================================*
-*                       w_do_close *
+*                       15 w_do_close *
 *===========================================================================*/
 PRIVATE int w_do_close(dp, m_ptr)
 struct driver *dp;
@@ -941,7 +942,7 @@ message *m_ptr;
     return(OK);
 }
 /*===========================================================================*
-*                       com_simple *
+*                       16 com_simple *
 *===========================================================================*/
 PRIVATE int com_simple(cmd)
 struct command *cmd; /* Command block */
@@ -956,7 +957,7 @@ struct command *cmd; /* Command block */
     return(r);
 }
 /*===========================================================================*
-*                       w_timeout *
+*                       17 w_timeout *
 *===========================================================================*/
 PRIVATE void w_timeout(void)
 {
@@ -985,7 +986,7 @@ PRIVATE void w_timeout(void)
     }
 }
 /*===========================================================================*
-*                       w_reset *
+*                       18 w_reset *
 *===========================================================================*/
 PRIVATE int w_reset()
 {
@@ -1031,7 +1032,7 @@ PRIVATE int w_reset()
     return(OK);
 }
 /*===========================================================================*
-*                       w_intr_wait *
+*                       19 w_intr_wait *
 *===========================================================================*/
 PRIVATE void w_intr_wait()
 {
@@ -1059,7 +1060,7 @@ PRIVATE void w_intr_wait()
     }
 }
 /*===========================================================================*
-*                       at_intr_wait *
+*                       20 at_intr_wait *
 *===========================================================================*/
 PRIVATE int at_intr_wait()
 {
@@ -1083,7 +1084,7 @@ PRIVATE int at_intr_wait()
     return(r);
 }
 /*===========================================================================*
-*                       w_waitfor *
+*                       21 w_waitfor *
 *===========================================================================*/
 PRIVATE int w_waitfor(mask, value)
 int mask; /* status mask */
@@ -1110,7 +1111,7 @@ int value; /* required status */
     return(0);
 }
 /*===========================================================================*
-*                        w_geometry *
+*                        22 w_geometry *
 *===========================================================================*/
 PRIVATE void w_geometry(entry)
 struct partition *entry;
@@ -1128,7 +1129,7 @@ struct partition *entry;
     }
 }
 /*===========================================================================*
-*                       w_other *
+*                       23 w_other *
 *===========================================================================*/
 PRIVATE int w_other(dr, m)
 struct driver *dr;
@@ -1140,9 +1141,10 @@ message *m;
         return EINVAL;
     }
     
-	/* 5星级难，流程图 */
-    if (m->REQUEST == DIOCTIMEOUT) {
-        if ((r=sys_datacopy(m->PROC_NR, (vir_bytes)m->ADDRESS,
+	/* 5星级难，流程图 */            /* 结构体变量用 . 运算符来访问结构体的成员
+	                                     指向结构体的指针用->来访问其指向的结构体的成员*/
+    if (m->REQUEST == DIOCTIMEOUT) { /* m->请求==DIOC超时 */
+        if ((r=sys_datacopy(m->PROC_NR, (vir_bytes)m->ADDRESS, // m->进程_数字 Nummer Number？
         SELF, (vir_bytes)&timeout, sizeof(timeout))) != OK)
             return r;
 
@@ -1151,11 +1153,11 @@ message *m;
             timeout_ticks = DEF_TIMEOUT_TICKS;
             max_errors = MAX_ERRORS;
             wakeup_ticks = WAKEUP;
-            w_silent = 0;
+            w_silent = 0;        // silent不说话的
         } else if (timeout < 0) {
-            return EINVAL;
+            return EINVAL;       // EINVAL是参数值不正确的意思
         } else {
-            prev = wakeup_ticks;
+            prev = wakeup_ticks; // prev上一页，wake up唤醒
 
             if (!w_standard_timeouts) {
                 /* Set (lower) timeout, lower error
@@ -1169,13 +1171,13 @@ message *m;
                     timeout_ticks = timeout;
             }
 
-            if ((r=sys_datacopy(SELF, (vir_bytes)&prev,
+            if ((r=sys_datacopy(SELF, (vir_bytes)&prev, // SELF自已
             m->PROC_NR,(vir_bytes)m->ADDRESS,sizeof(prev)))!=OK)
                 return r;
         }
 
         return OK;
-    } else if (m->REQUEST == DIOCOPENCT) {
+    } else if (m->REQUEST == DIOCOPENCT) {  // m->请求 == DIOC打开控制？
         int count;
         if (w_prepare(m->DEVICE) == NIL_DEV) return ENXIO;
         count = w_wn->open_ct;
@@ -1187,7 +1189,7 @@ message *m;
     return EINVAL;
 }
 /*===========================================================================*
-*                       w_hw_int *
+*                       24 w_hw_int *
 *===========================================================================*/
 PRIVATE int w_hw_int(dr, m)
 struct driver *dr;
@@ -1199,7 +1201,7 @@ message *m;
     return OK;
 }
 /*===========================================================================*
-*                       ack_irqs *
+*                       25 ack_irqs *
 *===========================================================================*/
 PRIVATE void ack_irqs(unsigned int irqs)
 {

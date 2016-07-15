@@ -347,8 +347,7 @@ int dir; /* SCROLL_UP or SCROLL_DOWN */
         /* Scroll one line up in 3 ways: soft, avoid wrap, use origin. */
         if (softscroll) {
             vid_vid_copy(cons->c_start + scr_width, cons->c_start, chars);
-        } else
-            if (!wrap && cons->c_org + scr_size + scr_width >= cons->c_limit) {
+        } else if (!wrap && cons->c_org + scr_size + scr_width >= cons->c_limit) {
             vid_vid_copy(cons->c_org + scr_width, cons->c_start, chars);
             cons->c_org = cons->c_start;
         } else {
@@ -359,8 +358,7 @@ int dir; /* SCROLL_UP or SCROLL_DOWN */
         /* Scroll one line down in 3 ways: soft, avoid wrap, use origin. */
         if (softscroll) {
             vid_vid_copy(cons->c_start, cons->c_start + scr_width, chars);
-        } else
-            if (!wrap && cons->c_org < cons->c_start + scr_width) {
+        } else if (!wrap && cons->c_org < cons->c_start + scr_width) {
             new_org = cons->c_limit - scr_size;
             vid_vid_copy(cons->c_org, new_org + scr_width, chars);
             cons->c_org = new_org;
@@ -458,8 +456,7 @@ char c; /* next character in escape sequence */
             if (c >= ’0’ && c <= ’9’) {
                 if (cons->c_esc_parmp < bufend(cons->c_esc_parmv))
                     *cons->c_esc_parmp = *cons->c_esc_parmp * 10 + (c-’0’);
-            } else
-                if (c == ’;’) {
+            } else if (c == ’;’) {
                 if (cons->c_esc_parmp < bufend(cons->c_esc_parmv))
                     cons->c_esc_parmp++;
             } else {
@@ -496,8 +493,7 @@ char c; /* next character in escape sequence */
 
             default: break;
         }
-    } else
-    if (cons->c_esc_intro == ’[’) {
+    } else if (cons->c_esc_intro == ’[’) {
         /* Handle a sequence beginning with ESC [ and parameters */
         value = cons->c_esc_parmv[0];
         switch (c) {
@@ -533,21 +529,21 @@ char c; /* next character in escape sequence */
 
             case ’J’: /* ESC [sJ clears in display */
                 switch (value) {
-                case 0: /* Clear from cursor to end of screen */
-                count = scr_size - (cons->c_cur - cons->c_org);
-                dst = cons->c_cur;
-                break;
-                case 1: /* Clear from start of screen to cursor */
-                count = cons->c_cur - cons->c_org;
-                dst = cons->c_org;
-                break;
-                case 2: /* Clear entire screen */
-                count = scr_size;
-                dst = cons->c_org;
-                break;
-                default: /* Do nothing */
-                count = 0;
-                dst = cons->c_org;
+                    case 0: /* Clear from cursor to end of screen */
+                        count = scr_size - (cons->c_cur - cons->c_org);
+                        dst = cons->c_cur;
+                        break;
+                    case 1: /* Clear from start of screen to cursor */
+                        count = cons->c_cur - cons->c_org;
+                        dst = cons->c_org;
+                        break;
+                    case 2: /* Clear entire screen */
+                        count = scr_size;
+                        dst = cons->c_org;
+                        break;
+                    default: /* Do nothing */
+                        count = 0;
+                        dst = cons->c_org;
                 }
                 blank_color = cons->c_blank;
                 mem_vid_copy(BLANK_MEM, dst, count);
@@ -677,8 +673,7 @@ char c; /* next character in escape sequence */
 
                             if (!color) {
                                 /* Don’t mess up a monochrome screen */
-                            } else
-                                if (30 <= n && n <= 37) {
+                            } else if (30 <= n && n <= 37) {
                                 /* Foreground color */
                                 cons->c_attr =
                                 (cons->c_attr & 0xF8FF) |
@@ -686,8 +681,7 @@ char c; /* next character in escape sequence */
                                 cons->c_blank =
                                 (cons->c_blank & 0xF8FF) |
                                 (ansi_colors[(n - 30)] << 8);
-                            } else
-                                if (40 <= n && n <= 47) {
+                            } else if (40 <= n && n <= 47) {
                                 /* Background color */
                                 cons->c_attr =
                                 (cons->c_attr & 0x8FFF) |

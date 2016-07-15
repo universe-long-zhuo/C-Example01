@@ -31,27 +31,26 @@
 * DEV_SELECT: start select notification request
 * DEV_STATUS: FS wants to know status for SELECT or REVIVE
 * CANCEL: terminate a previous incomplete system call immediately
-812 File: drivers/tty/tty.c MINIX SOURCE CODE
 *
 * m_type TTY_LINE PROC_NR COUNT TTY_SPEK TTY_FLAGS ADDRESS
 * ---------------------------------------------------------------------------
-* | HARD_INT   | | | | | | |
+* | HARD_INT    | | | | | | |
 * |-------------+---------+---------+---------+---------+---------+---------|
-* | SYS_SIG    | sig set| | | | | |
+* | SYS_SIG     | sig set| | | | | |
 * |-------------+---------+---------+---------+---------+---------+---------|
-* | DEV_READ   |minor dev| proc nr | count | O_NONBLOCK| buf ptr |
+* | DEV_READ    |minor dev| proc nr | count | O_NONBLOCK| buf ptr |
 * |-------------+---------+---------+---------+---------+---------+---------|
-* | DEV_WRITE  |minor dev| proc nr | count | | | buf ptr |
+* | DEV_WRITE   |minor dev| proc nr | count | | | buf ptr |
 * |-------------+---------+---------+---------+---------+---------+---------|
-* | DEV_IOCTL  |minor dev| proc nr |func code|erase etc| flags | |
+* | DEV_IOCTL   |minor dev| proc nr |func code|erase etc| flags | |
 * |-------------+---------+---------+---------+---------+---------+---------|
-* | DEV_OPEN   |minor dev| proc nr | O_NOCTTY| | | |
+* | DEV_OPEN    |minor dev| proc nr | O_NOCTTY| | | |
 * |-------------+---------+---------+---------+---------+---------+---------|
-* | DEV_CLOSE  |minor dev| proc nr| | | | |
+* | DEV_CLOSE   |minor dev| proc nr| | | | |
 * |-------------+---------+---------+---------+---------+---------+---------|
-* | DEV_STATUS | | | | | | |
+* | DEV_STATUS  | | | | | | |
 * |-------------+---------+---------+---------+---------+---------+---------|
-* | CANCEL     |minor dev| proc nr| | | | |
+* | CANCEL      |minor dev| proc nr| | | | |
 * ---------------------------------------------------------------------------
 *
 * Changes:
@@ -246,7 +245,7 @@ PUBLIC void main(void)
                 cons_stop(); /* switch to primary console */
                 do_panic_dumps(&tty_mess);
                 continue;
-            case DIAGNOSTICS: /* a server wants to print some */
+            case DIAGNOSTICS: /* 诊断功能 a server wants to print some */
                 do_diagnostics(&tty_mess);
                 continue;
             case FKEY_CONTROL: /* (un)register a fkey observer */
@@ -337,8 +336,7 @@ int ops;
             tp->tty_select_ops &= ˜ops; /* unmark select event */
             event_found = 1;
             break;
-        }
-        else if (tp->tty_inrevived && tp->tty_incaller == m_ptr->m_source) {
+        } else if (tp->tty_inrevived && tp->tty_incaller == m_ptr->m_source) {
 
             /* Suspended request finished. Send a REVIVE. */
             m_ptr->m_type = DEV_REVIVE;
@@ -349,8 +347,7 @@ int ops;
             tp->tty_inrevived = 0; /* unmark revive event */
             event_found = 1;
             break;
-        }
-        else if (tp->tty_outrevived && tp->tty_outcaller == m_ptr->m_source) {
+        } else if (tp->tty_outrevived && tp->tty_outcaller == m_ptr->m_source) {
 
             /* Suspended request finished. Send a REVIVE. */
             m_ptr->m_type = DEV_REVIVE;
@@ -395,34 +392,32 @@ register message *m_ptr; /* pointer to message sent to the task */
     */
     if (tp->tty_inleft > 0) {
         r = EIO;
-    } else
-        if (m_ptr->COUNT <= 0) {
+    } else if (m_ptr->COUNT <= 0) {
         r = EINVAL;
-    } else
-    if (sys_umap(m_ptr->PROC_NR, D, (vir_bytes) m_ptr->ADDRESS, m_ptr->COUNT,
-    &phys_addr) != OK) {
+    } else if (sys_umap(m_ptr->PROC_NR, D, (vir_bytes) m_ptr->ADDRESS, m_ptr->COUNT,
+        &phys_addr) != OK) {
         r = EFAULT;
-        } else {
-            /* Copy information from the message to the tty struct. */
-            tp->tty_inrepcode = TASK_REPLY;
-            tp->tty_incaller = m_ptr->m_source;
-            tp->tty_inproc = m_ptr->PROC_NR;
-            tp->tty_in_vir = (vir_bytes) m_ptr->ADDRESS;
-            tp->tty_inleft = m_ptr->COUNT;
+    } else {
+        /* Copy information from the message to the tty struct. */
+        tp->tty_inrepcode = TASK_REPLY;
+        tp->tty_incaller = m_ptr->m_source;
+        tp->tty_inproc = m_ptr->PROC_NR;
+        tp->tty_in_vir = (vir_bytes) m_ptr->ADDRESS;
+        tp->tty_inleft = m_ptr->COUNT;
 
-            if (!(tp->tty_termios.c_lflag & ICANON)
-            && tp->tty_termios.c_cc[VTIME] > 0) {
-                if (tp->tty_termios.c_cc[VMIN] == 0) {
-                    /* MIN & TIME specify a read timer that finishes the
-                    * read in TIME/10 seconds if no bytes are available.
-                    */
-                    settimer(tp, TRUE);
-                    tp->tty_min = 1;
-                } else {
-                    /* MIN & TIME specify an inter-byte timer that may
-                    * have to be cancelled if there are no bytes yet.
-                    */
-                    if (tp->tty_eotct == 0) {
+        if (!(tp->tty_termios.c_lflag & ICANON)
+        && tp->tty_termios.c_cc[VTIME] > 0) {
+            if (tp->tty_termios.c_cc[VMIN] == 0) {
+                /* MIN & TIME specify a read timer that finishes the
+                * read in TIME/10 seconds if no bytes are available.
+                */
+                settimer(tp, TRUE);
+                tp->tty_min = 1;
+            } else {
+                /* MIN & TIME specify an inter-byte timer that may
+                * have to be cancelled if there are no bytes yet.
+                */
+                if (tp->tty_eotct == 0) {
                     settimer(tp, FALSE);
                     tp->tty_min = tp->tty_termios.c_cc[VMIN];
                 }
@@ -470,11 +465,9 @@ register message *m_ptr; /* pointer to message sent to the task */
     */
     if (tp->tty_outleft > 0) {
         r = EIO;
-    } else
-    if (m_ptr->COUNT <= 0) {
+    } else if (m_ptr->COUNT <= 0) {
         r = EINVAL;
-    } else
-    if (sys_umap(m_ptr->PROC_NR, D, (vir_bytes) m_ptr->ADDRESS, m_ptr->COUNT,
+    } else if (sys_umap(m_ptr->PROC_NR, D, (vir_bytes) m_ptr->ADDRESS, m_ptr->COUNT,
     &phys_addr) != OK) {
         r = EFAULT;
     } else {
@@ -522,18 +515,18 @@ message *m_ptr; /* pointer to message sent to task */
 
     /* Size of the ioctl parameter. */
     switch (m_ptr->TTY_REQUEST) {
-        case TCGETS: /* Posix tcgetattr function */
-        case TCSETS: /* Posix tcsetattr function, TCSANOW option */
-        case TCSETSW: /* Posix tcsetattr function, TCSADRAIN option */
-        case TCSETSF: /* Posix tcsetattr function, TCSAFLUSH option */
+        case TCGETS:     /* Posix tcgetattr function */
+        case TCSETS:     /* Posix tcsetattr function, TCSANOW option */
+        case TCSETSW:    /* Posix tcsetattr function, TCSADRAIN option */
+        case TCSETSF:    /* Posix tcsetattr function, TCSAFLUSH option */
             size = sizeof(struct termios);
             break;
 
-        case TCSBRK: /* Posix tcsendbreak function */
-        case TCFLOW: /* Posix tcflow function */
-        case TCFLSH: /* Posix tcflush function */
-        case TIOCGPGRP: /* Posix tcgetpgrp function */
-        case TIOCSPGRP: /* Posix tcsetpgrp function */
+        case TCSBRK:     /* Posix tcsendbreak function */
+        case TCFLOW:     /* Posix tcflow function */
+        case TCFLSH:     /* Posix tcflush function */
+        case TIOCGPGRP:  /* Posix tcgetpgrp function */
+        case TIOCSPGRP:  /* Posix tcsetpgrp function */
             size = sizeof(int);
             break;
 
@@ -542,15 +535,15 @@ message *m_ptr; /* pointer to message sent to task */
             size = sizeof(struct winsize);
             break;
 
-        case KIOCSMAP: /* load keymap (Minix extension) */
+        case KIOCSMAP:   /* load keymap (Minix extension) */
             size = sizeof(keymap_t);
             break;
 
-        case TIOCSFON: /* load font (Minix extension) */
+        case TIOCSFON:   /* load font (Minix extension) */
             size = sizeof(u8_t [8192]);
             break;
 
-        case TCDRAIN: /* Posix tcdrain function -- no parameter */
+        case TCDRAIN:    /* Posix tcdrain function -- no parameter */
         default: size = 0;
     }
 
@@ -720,9 +713,9 @@ message *m_ptr; /* pointer to message sent to task */
     proc_nr = m_ptr->PROC_NR;
     mode = m_ptr->COUNT;
     if ((mode & R_BIT) && tp->tty_inleft != 0 && proc_nr == tp->tty_inproc) {
-    /* Process was reading when killed. Clean up input. */
-    tty_icancel(tp);
-    tp->tty_inleft = tp->tty_incum = 0;
+        /* Process was reading when killed. Clean up input. */
+        tty_icancel(tp);
+        tp->tty_inleft = tp->tty_incum = 0;
     }
     if ((mode & W_BIT) && tp->tty_outleft != 0 && proc_nr == tp->tty_outproc) {
         /* Process was writing when killed. Clean up output. */
@@ -773,7 +766,7 @@ PUBLIC int select_try(struct tty *tp, int ops)
 PUBLIC int select_retry(struct tty *tp)
 {
     if (select_try(tp, tp->tty_select_ops))
-    notify(tp->tty_select_proc);
+        notify(tp->tty_select_proc);
     return OK;
 }
 /*===========================================================================*
@@ -1107,8 +1100,7 @@ register int ch; /* pointer to character to echo */
                 (*tp->tty_echo)(tp, ’@’ + (ch & IN_CHAR));
                 len = 2;
         }
-    } else
-        if ((ch & IN_CHAR) == ’\177’) {
+    } else if ((ch & IN_CHAR) == ’\177’) {
         /* A DEL prints as "ˆ?". */
         (*tp->tty_echo)(tp, ’ˆ’);
         (*tp->tty_echo)(tp, ’?’);
@@ -1444,8 +1436,7 @@ PRIVATE void tty_init()
         if (tp < tty_addr(NR_CONS)) {
             scr_init(tp);
             tp->tty_minor = CONS_MINOR + s;
-        } else
-            if (tp < tty_addr(NR_CONS+NR_RS_LINES)) {
+        } else if (tp < tty_addr(NR_CONS+NR_RS_LINES)) {
             rs_init(tp);
             tp->tty_minor = RS232_MINOR + s-NR_CONS;
         } else {

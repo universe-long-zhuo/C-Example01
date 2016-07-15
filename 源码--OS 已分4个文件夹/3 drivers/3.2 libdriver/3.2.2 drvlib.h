@@ -19,7 +19,7 @@ _PROTOTYPE( void partition, (struct driver *dr, int device, int style, int atapi
 #define bp_landingzone(t) (* (u16_t *) (&(t)[12]))
 #define bp_sectors(t) (* (u8_t *) (&(t)[14]))
 
-/* Miscellaneous. */
+/* Miscellaneous. 混杂的；各种各样的 */
 #define DEV_PER_DRIVE (1 + NR_PARTITIONS)
 #define MINOR_t0 64
 #define MINOR_r0 120

@@ -21,7 +21,6 @@
 #define ESC ’\33’     /* escape */
 
 #define O_NOCTTY      /* from <fcntl.h>, or cc will choke */
-MINIX SOURCE CODE File: drivers/tty/tty.h 809
 #define O_NONBLOCK 
 
 struct tty;
@@ -143,7 +142,6 @@ int status) );
 _PROTOTYPE( int tty_devnop, (struct tty *tp, int try) );
 _PROTOTYPE( int select_try, (struct tty *tp, int ops) );
 _PROTOTYPE( int select_retry, (struct tty *tp) );
-MINIX SOURCE CODE File: drivers/tty/tty.h 811
 
 /* console.c */
 _PROTOTYPE( void kputc, (int c) );

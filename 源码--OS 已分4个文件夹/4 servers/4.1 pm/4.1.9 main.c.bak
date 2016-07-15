@@ -40,7 +40,7 @@ struct mem_map *map_ptr) );
 ((unsigned) ((((unsigned long) (n) << CLICK_SHIFT) + 512) / 1024))
 
 // main             主
-// get_work         获读_工作
+// get_work         获取_工作
 // setreply         设置答复
 // pm_init          进程管理_初始化
 // get_nice_value   获读_nice_值
