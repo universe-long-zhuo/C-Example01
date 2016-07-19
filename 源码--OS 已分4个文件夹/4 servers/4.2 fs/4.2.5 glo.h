@@ -8,7 +8,7 @@ MINIX SOURCE CODE File: servers/fs/glo.h 925
 #define EXTERN
 #endif
 
-/* File System global variables */
+/* File System global全局 variables */
 EXTERN struct fproc *fp; /* pointer to caller’s fproc struct */
 EXTERN int super_user; /* 1 if caller is super_user, else 0 */
 EXTERN int susp_count; /* number of procs suspended on pipe */

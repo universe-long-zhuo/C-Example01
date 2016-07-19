@@ -112,8 +112,7 @@ int only_search;        /* if NO_READ, don’t read, else act normal */
     /* Go get the requested block unless searching or prefetching. */
     if (dev != NO_DEV) {
         if (only_search == PREFETCH) bp->b_dev = NO_DEV;
-        else
-        if (only_search == NORMAL) {
+        else if (only_search == NORMAL) {
             rw_block(bp, READING);
         }
     }
@@ -201,7 +200,6 @@ zone_t z; /* try to allocate new zone near this one */
     sp = get_super(dev);
 
     /* If z is 0, skip initial part of the map known to be fully in use. */
-    MINIX SOURCE CODE File: servers/fs/cache.c 937
     if (z == sp->s_firstdatazone) {
         bit = sp->s_zsearch;
     } else {

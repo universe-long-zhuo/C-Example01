@@ -205,7 +205,7 @@ register struct inode *rip; /* pointer to inode */
     if (dev == root_dev) return(TRUE); /* inode is on root file system */
 
     for (sp = &super_block[0]; sp < &super_block[NR_SUPERS]; sp++)
-    if (sp->s_dev == dev) return(TRUE);
+        if (sp->s_dev == dev) return(TRUE);
 
     return(FALSE);
 }

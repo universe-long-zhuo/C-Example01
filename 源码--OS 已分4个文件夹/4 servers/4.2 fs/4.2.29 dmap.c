@@ -160,13 +160,11 @@ PUBLIC void build_dmap()
     /* Determine major number to map driver onto. */
     if (controller[0] == ’f’ && controller[1] == ’d’) {
         major = FLOPPY_MAJOR;
-    }
-    else if (controller[0] == ’c’ && isdigit(controller[1])) {
+    } else if (controller[0] == ’c’ && isdigit(controller[1])) {
         if ((nr = (unsigned) atoi(&controller[1])) > NR_CTRLRS)
             panic(__FILE__,"monitor ’controller’ maximum ’c#’ is", NR_CTRLRS);
         major = CTRLR(nr);
-    }
-    else {
+    } else {
         panic(__FILE__,"monitor ’controller’ syntax is ’c#’ of ’fd’", NO_NUM);
     }
 

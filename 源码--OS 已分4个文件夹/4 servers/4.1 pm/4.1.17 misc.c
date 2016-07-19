@@ -283,8 +283,7 @@ PUBLIC int do_svrctl()
             if (sysgetenv.keylen == 0) { /* copy all parameters */
                 val_start = monitor_params;
                 val_len = sizeof(monitor_params);
-            }
-            else { /* lookup value for key */
+            } else { /* lookup value for key */
                 int p;
                 /* Try to get a copy of the requested key. */
                 if (sysgetenv.keylen > sizeof(search_key)) return(EINVAL);
@@ -320,6 +319,6 @@ PUBLIC int do_svrctl()
             return OK;
         }
         default:
-        return(EINVAL);
+            return(EINVAL);
     }
 }

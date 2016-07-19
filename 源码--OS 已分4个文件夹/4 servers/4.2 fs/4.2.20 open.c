@@ -465,13 +465,13 @@ PUBLIC int do_lseek()
 
     /* Check for overflow. */
     if (((long)m_in.offset > 0) && ((long)(pos + m_in.offset) < (long)pos))
-    return(EINVAL);
+        return(EINVAL);
     if (((long)m_in.offset < 0) && ((long)(pos + m_in.offset) > (long)pos))
-    return(EINVAL);
+        return(EINVAL);
     pos = pos + m_in.offset;
 
     if (pos != rfilp->filp_pos)
-    rfilp->filp_ino->i_seek = ISEEK; /* inhibit read ahead */
+        rfilp->filp_ino->i_seek = ISEEK; /* inhibit read ahead */
     rfilp->filp_pos = pos;
     m_out.reply_l1 = pos; /* insert the long into the output message */
     return(OK);

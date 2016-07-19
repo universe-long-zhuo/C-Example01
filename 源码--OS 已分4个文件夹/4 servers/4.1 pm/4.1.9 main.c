@@ -65,7 +65,7 @@ PUBLIC int main()
 
         /* Check for system notifications first. Special cases. */
         if (call_nr == SYN_ALARM) {
-            pm_expire_timers(m_in.NOTIFY_TIMESTAMP);
+            pm_expire_timers(m_in.NOTIFY_TIMESTAMP);  // 通知_时间印
             result = SUSPEND; /* don’t reply */
         } else if (call_nr == SYS_SIG) { /* signals pending */
             sigset = m_in.NOTIFY_ARG;
@@ -179,7 +179,7 @@ PRIVATE void pm_init()
     */
     sigemptyset(&core_sset);
     for (sig_ptr = core_sigs; sig_ptr < core_sigs+sizeof(core_sigs); sig_ptr++)
-    sigaddset(&core_sset, *sig_ptr);
+        sigaddset(&core_sset, *sig_ptr);
     sigemptyset(&ign_sset);
     for (sig_ptr = ign_sigs; sig_ptr < ign_sigs+sizeof(ign_sigs); sig_ptr++)
         sigaddset(&ign_sset, *sig_ptr);
@@ -220,8 +220,7 @@ PRIVATE void pm_init()
                 rmp->mp_pid = INIT_PID;
                 rmp->mp_flags |= IN_USE;
                 sigemptyset(&rmp->mp_ignore);
-            }
-            else { /* system process */
+            } else { /* system process */
                 rmp->mp_pid = get_free_pid();
                 rmp->mp_flags |= IN_USE | DONT_SWAP | PRIV_PROC;
                 sigfillset(&rmp->mp_ignore);

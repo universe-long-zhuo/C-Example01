@@ -305,10 +305,10 @@ int sec; /* how many seconds delay before the signal */
     if (mproc[proc_nr].mp_flags & ALARM_ON) {
         if ( (s=getuptime(&uptime)) != OK)
             panic(__FILE__,"set_alarm couldn’t get uptime", s);
-            exptime = *tmr_exp_time(&mproc[proc_nr].mp_timer);
-            remaining = (int) ((exptime - uptime + (HZ-1))/HZ);
-            if (remaining < 0) remaining = 0;
-        } else {
+        exptime = *tmr_exp_time(&mproc[proc_nr].mp_timer);
+        remaining = (int) ((exptime - uptime + (HZ-1))/HZ);
+        if (remaining < 0) remaining = 0;
+    } else {
         remaining = 0;
     }
 
@@ -457,8 +457,7 @@ int signo; /* signal to send to process (1 to _NSIG) */
             return;
         }
         panic(__FILE__, "warning, sys_sigsend failed", s);
-    }
-    else if (sigismember(&rmp->mp_sig2mess, signo)) {
+    } else if (sigismember(&rmp->mp_sig2mess, signo)) {
         if (OK != (s=sys_kill(slot,signo)))
         panic(__FILE__, "warning, sys_kill failed", s);
         return;
