@@ -46,7 +46,6 @@ _PROTOTYPE( void pm_exit, (struct mproc *rmp, int exit_status) );
 
 /* getset.c */
 _PROTOTYPE( int do_getset, (void) );
-MINIX SOURCE CODE File: servers/pm/proto.h 869
 
 /* main.c */
 _PROTOTYPE( int main, (void) );

@@ -45,14 +45,14 @@ vir_bytes *pc) );
 #define ESCRIPT (-2000) /* Returned by read_header for a #! script. */
 #define PTRSIZE sizeof(char *) /* Size of pointers in argv[] and envp[]. */
 
-// do_exec       做_执行
-// read_header   读_头部
-// new_mem       新_内存
-// patch_ptr   修补_指针
-// insert_arg  插入_参数
-// patch_stack 修补_堆栈
-// rw_seg      读写_段
-// find_share  发现_共享
+// do_exec       做_执行  1
+// read_header   读_头部  2
+// new_mem       新_内存  3
+// patch_ptr   修补_指针  4
+// insert_arg  插入_参数  5
+// patch_stack 修补_堆栈  6
+// rw_seg      读写_段    7
+// find_share  发现_共享  8
 
 /*===========================================================================*
 *                       do_exec 做_执行 *
@@ -204,7 +204,7 @@ int fd; /* file descriptor for reading exec file */
 int *ft; /* place to return ft number */
 vir_bytes *text_bytes; /* place to return text size */
 vir_bytes *data_bytes; /* place to return initialized data size */
-vir_bytes *bss_bytes; /* place to return bss size */
+vir_bytes  *bss_bytes; /* place to return bss size */
 phys_bytes *tot_bytes; /* place to return total size */
 long *sym_bytes; /* place to return symbol table size */
 vir_clicks sc; /* stack size in clicks */
@@ -445,7 +445,7 @@ int replace;
         a0 += PTRSIZE; /* location of new argv[0][]. */
     }
 
-    /* stack will grow by offset bytes (or shrink by -offset bytes) */
+    /* stack will grow by offset bytes (or shrink by -offset偏移 bytes) */
     if ((*stk_bytes += offset) > ARG_MAX) return(FALSE);
 
     /* Reposition the strings by offset bytes */

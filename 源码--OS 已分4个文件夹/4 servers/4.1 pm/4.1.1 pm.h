@@ -1,4 +1,3 @@
-MINIX SOURCE CODE File: servers/pm/pm.h 867
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                              servers/pm/pm.h
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -6,12 +5,12 @@ MINIX SOURCE CODE File: servers/pm/pm.h 867
 * and defines the principal constants.
 */
 #define _POSIX_SOURCE 1 /* tell headers to include POSIX stuff */
-#define _MINIX 1 /* tell headers to include MINIX stuff */
-#define _SYSTEM 1 /* tell headers that this is the kernel */
+#define _MINIX        1 /* tell headers to include MINIX stuff */
+#define _SYSTEM       1 /* tell headers that this is the kernel */
 
 /* The following are so basic, all the *.c files get them automatically. */
 #include <minix/config.h> /* MUST be first */
-#include <ansi.h> /* MUST be second */
+#include <ansi.h>         /* MUST be second */
 #include <sys/types.h>
 #include <minix/const.h>
 #include <minix/type.h>

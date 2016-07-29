@@ -42,22 +42,23 @@ FORWARD _PROTOTYPE( void unpause, (int pro) );
 FORWARD _PROTOTYPE( void handle_sig, (int proc_nr, sigset_t sig_map) );
 FORWARD _PROTOTYPE( void cause_sigalrm, (struct timer *tp) );
 
-// do_sigaction     做_信号活动
-// do_sigpending    做_信号待定
-// do_sigprocmask   做_信号进程掩码
-// do_sigsuspend    做_信号挂起
-// do_sigreturn     做_信号返回
-// do_kill          做_杀死
-// ksig_pending 杀信号_待定
-// handle_sig     处理_信号
-// do_alarm         做_警报
-// set_alarm      设置_警报
-// cause_sigarm   原因_信号警报
-// do_pause         做_暂停
-// sig_proc       信号_进程
-// check_pending  检查_待定
-// unpause        取消暂停
-// dump_core      倾倒_核心
+// do_sigaction     做_信号活动      1
+// do_sigpending    做_信号待定      2
+// do_sigprocmask   做_信号进程掩码  3
+// do_sigsuspend    做_信号挂起      4
+// do_sigreturn     做_信号返回      5
+// do_kill          做_杀死          6
+// ksig_pending 杀信号_待定          7
+// handle_sig     处理_信号          8
+// do_alarm         做_警报          9
+// set_alarm      设置_警报         10
+// cause_sigarm   原因_信号警报     11
+// do_pause         做_暂停         12
+// sig_proc       信号_进程         13
+// check_sig      检查_信号         14
+// check_pending  检查_待定         15
+// unpause        取消暂停          16
+// dump_core      倾倒_核心         17
 
 /*===========================================================================*
 *                       do_sigaction 做_信号活动 *
@@ -131,7 +132,6 @@ PUBLIC int do_sigprocmask()
 *
 * The library interface must set SIG_INQUIRE if the ’act’ argument
 * is NULL.
-900 File: servers/pm/signal.c MINIX SOURCE CODE
 */
 
     int i;
