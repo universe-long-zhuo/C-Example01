@@ -139,7 +139,7 @@ irq_hook_t *hook;
         */
         irq_actids[hook->irq] |= hook->id;
         if ((*hook->handler)(hook)) irq_actids[hook->irq] &= ˜hook->id;
-            hook = hook->next;
+        hook = hook->next;
     }
 
     /* The assembly code will now disable interrupts, unmask the IRQ if and only

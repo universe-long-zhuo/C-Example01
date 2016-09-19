@@ -30,7 +30,7 @@ FORWARD _PROTOTYPE(void kputc, (int c));
 
 // panic   恐慌
 // kprintf 内核_打印
-// kputc   ？
+// kputc   内核放字符
 
 /*===========================================================================*
 *                       panic 恐慌 *

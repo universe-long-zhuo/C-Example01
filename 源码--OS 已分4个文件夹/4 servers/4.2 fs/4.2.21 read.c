@@ -33,8 +33,8 @@ char *buff, int seg, int usr, int block_size, int *completed));
 // rw_chunk   读_区块？
 // read_map   读_映射
 // rd_indir   好像是读_索引节点目录
-// read_ahead 读_这是什么？
-// rahead     这是？前面r
+// read_ahead 读_领先
+// rahead     读领先
 
 /*===========================================================================*
 *                       do_read 读 *

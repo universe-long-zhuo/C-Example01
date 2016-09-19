@@ -49,15 +49,15 @@ PUBLIC int do_utime()
             rip->i_atime = m_in.utime_actime;
             rip->i_mtime = m_in.utime_modtime;
         }
-    rip->i_update = CTIME; /* discard any stale ATIME and MTIME flags */
-    rip->i_dirt = DIRTY;
+        rip->i_update = CTIME; /* discard any stale ATIME and MTIME flags */
+        rip->i_dirt = DIRTY;
     }
 
     put_inode(rip);
     return(r);
 }
 /*===========================================================================*
-* do_stime *
+*                        do_stime *
 *===========================================================================*/
 PUBLIC int do_stime()
 {

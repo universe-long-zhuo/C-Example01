@@ -40,6 +40,7 @@ extern int dmap_size;
 // tty_opcl   电传打字机_打开关闭
 // ctty_opcl  ？
 // do_setsid  ？
+// do_ioctl   IO控制
 // gen_io     通过_IO
 // ctty_io    ？
 // no_dev     没有_设备

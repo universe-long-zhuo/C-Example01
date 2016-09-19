@@ -32,14 +32,14 @@ FORWARD _PROTOTYPE( void new_icopy, (struct inode *rip, d2_inode *dip,
 int direction, int norm));
 
 // get_inode     获取_i节点
-// put_inode     放_i节点
+// put_inode       放_i节点
 // alloc_inode   分配_i节点
 // wipe_inode    清除_i节点
 // free_inode    空闲_i节点
 // update_times  更新_时间
 // rw_inode      读写_i节点
-// old_inode     旧_i节点
-// new_icopy     新_i复制
+// old_inode       旧_i节点
+// new_icopy       新_i复制
 // dup_inode     Data User Part_i节点
 
 /*===========================================================================*

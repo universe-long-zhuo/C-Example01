@@ -28,6 +28,15 @@ FORWARD _PROTOTYPE( int stat_inode, (struct inode *rip, struct filp *fil_ptr,
 char *user_addr) );
 
 // do_fchdir 文件改变目录？
+// do_chdir  改变目录
+// do_chroot 改变根目录
+// change 改变
+// change_into 改变_进入
+// do_stat 状态
+// do_fstat 文件状态？
+// stat_inode 状态_索引节点
+// do_fstatfs ？
+
 
 /*===========================================================================*
 *                        do_fchdir 改变当前工作目录 *
@@ -201,7 +210,7 @@ char *user_addr; /* user space address where stat buf goes */
    if (rip->i_pipe == I_PIPE) {
       statbuf.st_mode &= ˜I_REGULAR; /* wipe out I_REGULAR bit for pipes */
       if (fil_ptr != NIL_FILP && fil_ptr->filp_mode & R_BIT)
-      statbuf.st_size -= fil_ptr->filp_pos;
+          statbuf.st_size -= fil_ptr->filp_pos;
    }
 
    statbuf.st_atime = rip->i_atime;

@@ -166,7 +166,7 @@ int notouch; /* check only */
             }
         }
         if (!notouch)
-        suspend(XPIPE); /* stop writer -- pipe full */
+            suspend(XPIPE); /* stop writer -- pipe full */
         return(SUSPEND);
     }
 
@@ -385,6 +385,6 @@ PUBLIC int select_match_pipe(struct filp *f)
 {
 /* recognize either pipe or named pipe (FIFO) */
     if (f && f->filp_ino && (f->filp_ino->i_mode & I_NAMED_PIPE))
-    return 1;
+        return 1;
     return 0;
 }

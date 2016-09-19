@@ -164,7 +164,7 @@ Dev_t dev;
     */
     count = 0;
     for (rip = &inode[0]; rip< &inode[NR_INODES]; rip++)
-    if (rip->i_count > 0 && rip->i_dev == dev) count += rip->i_count;
+        if (rip->i_count > 0 && rip->i_dev == dev) count += rip->i_count;
     if (count > 1) return(EBUSY); /* can’t umount a busy file system */
 
     /* Find the super block. */

@@ -294,46 +294,46 @@ PRIVATE void load_ram(void)
     if (root_dev == DEV_RAM) {
         u32_t fsmax, probedev;
 
-    /* If we are running from CD, see if we can find it. */
-    if (igetenv("cdproberoot", 1) && (probedev=cdprobe()) != NO_DEV) {
-        char devnum[10];
-        struct sysgetenv env;
+        /* If we are running from CD, see if we can find it. */
+        if (igetenv("cdproberoot", 1) && (probedev=cdprobe()) != NO_DEV) {
+            char devnum[10];
+            struct sysgetenv env;
 
-        /* If so, this is our new RAM image device. */
-        image_dev = probedev;
+            /* If so, this is our new RAM image device. */
+            image_dev = probedev;
 
-        /* Tell PM about it, so userland can find out about it
-        * with sysenv interface.
+            /* Tell PM about it, so userland can find out about it
+            * with sysenv interface.
+            */
+            env.key = "cdproberoot";
+            env.keylen = strlen(env.key);
+            sprintf(devnum, "%d", (int) probedev);
+            env.val = devnum;
+            env.vallen = strlen(devnum);
+            svrctl(MMSETPARAM, &env);
+        }
+
+        /* Open image device for RAM root. */
+        if (dev_open(image_dev, FS_PROC_NR, R_BIT) != OK)
+            panic(__FILE__,"Cannot open RAM image device", NO_NUM);
+
+        /* Get size of RAM disk image from the super block. */
+        sp = &super_block[0];
+        sp->s_dev = image_dev;
+        if (read_super(sp) != OK)
+            panic(__FILE__,"Bad RAM disk image FS", NO_NUM);
+
+        lcount = sp->s_zones << sp->s_log_zone_size; /* # blks on root dev*/
+
+        /* Stretch the RAM disk file system to the boot parameters size, but
+        * no further than the last zone bit map block allows.
         */
-        env.key = "cdproberoot";
-        env.keylen = strlen(env.key);
-        sprintf(devnum, "%d", (int) probedev);
-        env.val = devnum;
-        env.vallen = strlen(devnum);
-        svrctl(MMSETPARAM, &env);
-    }
-
-    /* Open image device for RAM root. */
-    if (dev_open(image_dev, FS_PROC_NR, R_BIT) != OK)
-        panic(__FILE__,"Cannot open RAM image device", NO_NUM);
-
-    /* Get size of RAM disk image from the super block. */
-    sp = &super_block[0];
-    sp->s_dev = image_dev;
-    if (read_super(sp) != OK)
-        panic(__FILE__,"Bad RAM disk image FS", NO_NUM);
-
-    lcount = sp->s_zones << sp->s_log_zone_size; /* # blks on root dev*/
-
-    /* Stretch the RAM disk file system to the boot parameters size, but
-    * no further than the last zone bit map block allows.
-    */
-    if (ram_size_kb*1024 < lcount*sp->s_block_size)
-        ram_size_kb = lcount*sp->s_block_size/1024;
-    fsmax = (u32_t) sp->s_zmap_blocks * CHAR_BIT * sp->s_block_size;
-    fsmax = (fsmax + (sp->s_firstdatazone-1)) << sp->s_log_zone_size;
-    if (ram_size_kb*1024 > fsmax*sp->s_block_size)
-        ram_size_kb = fsmax*sp->s_block_size/1024;
+        if (ram_size_kb*1024 < lcount*sp->s_block_size)
+            ram_size_kb = lcount*sp->s_block_size/1024;
+        fsmax = (u32_t) sp->s_zmap_blocks * CHAR_BIT * sp->s_block_size;
+        fsmax = (fsmax + (sp->s_firstdatazone-1)) << sp->s_log_zone_size;
+        if (ram_size_kb*1024 > fsmax*sp->s_block_size)
+            ram_size_kb = fsmax*sp->s_block_size/1024;
     }
 
     /* Tell RAM driver how big the RAM disk must be. */

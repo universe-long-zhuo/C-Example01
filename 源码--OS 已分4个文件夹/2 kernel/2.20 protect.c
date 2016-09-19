@@ -70,8 +70,8 @@ vir_bytes size) );
 // init_codeseg 初始化_代码段
 // init_dataseg 初始化_数据段
 // sdesc          段描述？
-// seg2phys       ？
-// phys2seg       ？
+// seg2phys       段2物理
+// phys2seg       物理2段
 // int_gate       整型_门
 // enable_iop     能使_输入输出处理器
 // alloc_segments 分配_段

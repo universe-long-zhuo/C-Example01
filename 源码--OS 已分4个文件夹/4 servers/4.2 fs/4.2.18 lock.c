@@ -178,6 +178,11 @@ PUBLIC void lock_revive()
 * locking).
 */
 
+/*
+* circumstance
+* environment   环境
+*/
+
     int task;
     struct fproc *fptr;
 

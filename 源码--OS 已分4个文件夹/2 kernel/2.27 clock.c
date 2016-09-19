@@ -73,8 +73,8 @@ PRIVATE irq_hook_t clock_hook; /* interrupt handler hook */
 // clock_stop    时钟_停止
 // clock_handler 时钟_处理器
 // get_uptime    获取_更新时间
-// set_timer     设置_时间者
-// reset_time    重新设置_时间
+// set_timer     设置_定时器
+// reset_timer   重新设置_定时器
 // read_clock    读_时钟
 
 /*===========================================================================*
@@ -207,7 +207,7 @@ irq_hook_t *hook;
     * Thus the unbillable process’ user time is the billable user’s system time.
     */
     proc_ptr->p_user_time += ticks;
-        if (priv(proc_ptr)->s_flags & PREEMPTIBLE) {
+    if (priv(proc_ptr)->s_flags & PREEMPTIBLE) {
         proc_ptr->p_ticks_left -= ticks;
     }
     if (! (priv(proc_ptr)->s_flags & BILLABLE)) {

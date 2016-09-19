@@ -311,40 +311,40 @@ int flag; /* LOOK_UP, ENTER, DELETE or IS_EMPTY */
                     strcmp(dp->d_name, "..") != 0) match = 1;
                 } else {
                     if (strncmp(dp->d_name, string, NAME_MAX) == 0) {
-                    match = 1;
+                        match = 1;
+                    }
                 }
             }
-        }
 
-        if (match) {
-            /* LOOK_UP or DELETE found what it wanted. */
-            r = OK;
-            if (flag == IS_EMPTY) r = ENOTEMPTY;
-            else if (flag == DELETE) {
-                /* Save d_ino for recovery. */
-                t = NAME_MAX - sizeof(ino_t);
-                *((ino_t *) &dp->d_name[t]) = dp->d_ino;
-                dp->d_ino = 0; /* erase entry */
-                bp->b_dirt = DIRTY;
-                ldir_ptr->i_update |= CTIME | MTIME;
-                ldir_ptr->i_dirt = DIRTY;
-            } else {
-                sp = ldir_ptr->i_sp; /* ’flag’ is LOOK_UP */
-                *numb = conv4(sp->s_native, (int) dp->d_ino);
+            if (match) {
+                /* LOOK_UP or DELETE found what it wanted. */
+                r = OK;
+                if (flag == IS_EMPTY) r = ENOTEMPTY;
+                else if (flag == DELETE) {
+                    /* Save d_ino for recovery. */
+                    t = NAME_MAX - sizeof(ino_t);
+                    *((ino_t *) &dp->d_name[t]) = dp->d_ino;
+                    dp->d_ino = 0; /* erase entry */
+                    bp->b_dirt = DIRTY;
+                    ldir_ptr->i_update |= CTIME | MTIME;
+                    ldir_ptr->i_dirt = DIRTY;
+                } else {
+                    sp = ldir_ptr->i_sp; /* ’flag’ is LOOK_UP */
+                    *numb = conv4(sp->s_native, (int) dp->d_ino);
+                }
+                put_block(bp, DIRECTORY_BLOCK);
+                return(r);
             }
-            put_block(bp, DIRECTORY_BLOCK);
-            return(r);
-        }
 
-        /* Check for free slot for the benefit of ENTER. */
-        if (flag == ENTER && dp->d_ino == 0) {
-            e_hit = TRUE; /* we found a free slot */
-            break;
+            /* Check for free slot for the benefit of ENTER. */
+            if (flag == ENTER && dp->d_ino == 0) {
+                e_hit = TRUE; /* we found a free slot */
+                break;
+            }
         }
-    }
 
     /* The whole block has been searched or ENTER has a free slot. */
-    if (e_hit) break; /* e_hit set if ENTER can be performed now */
+        if (e_hit) break; /* e_hit set if ENTER can be performed now */
         put_block(bp, DIRECTORY_BLOCK); /* otherwise, continue searching dir */
     }
 

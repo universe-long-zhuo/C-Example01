@@ -90,7 +90,7 @@ PUBLIC int do_link()
 
     /* Check for links across devices. */
     if (r == OK)
-    if (rip->i_dev != ip->i_dev) r = EXDEV;
+        if (rip->i_dev != ip->i_dev) r = EXDEV;
 
     /* Try to link. */
     if (r == OK)
@@ -126,7 +126,7 @@ PUBLIC int do_unlink()
     /* Get the last directory in the path. */
     if (fetch_name(m_in.name, m_in.name_length, M3) != OK) return(err_code);
     if ( (rldirp = last_dir(user_path, string)) == NIL_INODE)
-    return(err_code);
+        return(err_code);
 
     /* The last directory exists. Does the file also exist? */
     r = OK;
@@ -200,46 +200,46 @@ PUBLIC int do_rename()
     if (r == OK) {
         same_pdir = (old_dirp == new_dirp);
 
-    /* The old inode must not be a superdirectory of the new last dir. */
-    if (odir && !same_pdir) {
-        dup_inode(new_superdirp = new_dirp);
-        while (TRUE) { /* may hang in a file system loop */
-            if (new_superdirp == old_ip) {
-                r = EINVAL;
-                break;
+        /* The old inode must not be a superdirectory of the new last dir. */
+        if (odir && !same_pdir) {
+            dup_inode(new_superdirp = new_dirp);
+            while (TRUE) { /* may hang in a file system loop */
+                if (new_superdirp == old_ip) {
+                    r = EINVAL;
+                    break;
+                }
+                next_new_superdirp = advance(new_superdirp, dot2);
+                put_inode(new_superdirp);
+                if (next_new_superdirp == new_superdirp)
+                    break; /* back at system root directory */
+                new_superdirp = next_new_superdirp;
+                if (new_superdirp == NIL_INODE) {
+                    /* Missing ".." entry. Assume the worst. */
+                    r = EINVAL;
+                    break;
+                }
             }
-            next_new_superdirp = advance(new_superdirp, dot2);
             put_inode(new_superdirp);
-            if (next_new_superdirp == new_superdirp)
-                break; /* back at system root directory */
-            new_superdirp = next_new_superdirp;
-            if (new_superdirp == NIL_INODE) {
-                /* Missing ".." entry. Assume the worst. */
-                r = EINVAL;
-                break;
-            }
         }
-        put_inode(new_superdirp);
-    }
 
-    /* The old or new name must not be . or .. */
-    if (strcmp(old_name, ".")==0 || strcmp(old_name, "..")==0 ||
-        strcmp(new_name, ".")==0 || strcmp(new_name, "..")==0) r = EINVAL;
+        /* The old or new name must not be . or .. */
+        if (strcmp(old_name, ".")==0 || strcmp(old_name, "..")==0 ||
+            strcmp(new_name, ".")==0 || strcmp(new_name, "..")==0) r = EINVAL;
 
-    /* Both parent directories must be on the same device. */
-    if (old_dirp->i_dev != new_dirp->i_dev) r = EXDEV;
+        /* Both parent directories must be on the same device. */
+        if (old_dirp->i_dev != new_dirp->i_dev) r = EXDEV;
 
-    /* Parent dirs must be writable, searchable and on a writable device */
-    if ((r1 = forbidden(old_dirp, W_BIT | X_BIT)) != OK ||
-        (r1 = forbidden(new_dirp, W_BIT | X_BIT)) != OK) r = r1;
+        /* Parent dirs must be writable, searchable and on a writable device */
+        if ((r1 = forbidden(old_dirp, W_BIT | X_BIT)) != OK ||
+            (r1 = forbidden(new_dirp, W_BIT | X_BIT)) != OK) r = r1;
 
-    /* Some tests apply only if the new path exists. */
-    if (new_ip == NIL_INODE) {
-        /* don’t rename a file with a file system mounted on it. */
-        if (old_ip->i_dev != old_dirp->i_dev) r = EXDEV;
-        if (odir && new_dirp->i_nlinks >=
-            (new_dirp->i_sp->s_version == V1 ? CHAR_MAX : SHRT_MAX) &&
-            !same_pdir && r == OK) r = EMLINK;
+        /* Some tests apply only if the new path exists. */
+        if (new_ip == NIL_INODE) {
+            /* don’t rename a file with a file system mounted on it. */
+            if (old_ip->i_dev != old_dirp->i_dev) r = EXDEV;
+            if (odir && new_dirp->i_nlinks >=
+                (new_dirp->i_sp->s_version == V1 ? CHAR_MAX : SHRT_MAX) &&
+                !same_pdir && r == OK) r = EMLINK;
         } else {
             if (old_ip == new_ip) r = SAME; /* old=new */
 
@@ -403,7 +403,7 @@ char dir_name[NAME_MAX]; /* name of directory to be removed */
     if (rip->i_num == ROOT_INODE) return(EBUSY); /* can’t remove ’root’ */
 
     for (rfp = &fproc[INIT_PROC_NR + 1]; rfp < &fproc[NR_PROCS]; rfp++)
-    if (rfp->fp_workdir == rip || rfp->fp_rootdir == rip) return(EBUSY);
+        if (rfp->fp_workdir == rip || rfp->fp_rootdir == rip) return(EBUSY);
     /* can’t remove anybody’s working dir */
 
     /* Actually try to unlink the file; fails if parent is mode 0 etc. */
@@ -431,9 +431,9 @@ char file_name[NAME_MAX]; /* name of file to be removed */
 
     /* If rip is not NIL_INODE, it is used to get faster access to the inode. */
     if (rip == NIL_INODE) {
-    /* Search for file in directory and try to get its inode. */
-    err_code = search_dir(dirp, file_name, &numb, LOOK_UP);
-    if (err_code == OK) rip = get_inode(dirp->i_dev, (int) numb);
+        /* Search for file in directory and try to get its inode. */
+        err_code = search_dir(dirp, file_name, &numb, LOOK_UP);
+        if (err_code == OK) rip = get_inode(dirp->i_dev, (int) numb);
         if (err_code != OK || rip == NIL_INODE) return(err_code);
     } else {
         dup_inode(rip); /* inode will be returned with put_inode */

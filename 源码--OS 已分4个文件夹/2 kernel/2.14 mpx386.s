@@ -231,7 +231,6 @@ outb INT_CTL /* reenable master 8259 */;\
 ret /* restart (another) process */
 
 ! Each of these entry points is an expansion of the hwint_master macro
-MINIX SOURCE CODE File: kernel/mpx386.s 711
 .align 16
 _hwint00: ! Interrupt routine for irq 0 (the clock).
 hwint_master(0)

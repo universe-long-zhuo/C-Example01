@@ -28,8 +28,8 @@ PUBLIC int get_fd(int start, mode_t bits, int *k, struct filp **fpt)
 * may yet fail.
 */
 
-    register struct filp *f;
-    register int i;
+    register struct filp *f;  // file pointer 声明？
+    register int i;           // 循环 i 声明
 
     *k = -1; /* we need a way to tell if file desc found */
 
@@ -38,7 +38,7 @@ PUBLIC int get_fd(int start, mode_t bits, int *k, struct filp **fpt)
         if (fp->fp_filp[i] == NIL_FILP) {
             /* A file descriptor has been located. */
             *k = i;
-        break;
+            break;
         }
     }
 

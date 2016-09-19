@@ -7,11 +7,11 @@
 * cache.
 *
 * The entry points into this file are:
-* get_block: request to fetch a block for reading or writing from cache
-* put_block: return a block previously requested with get_block
+*  get_block: request to fetch a block for reading or writing from cache
+*  put_block: return a block previously requested with get_block
 * alloc_zone: allocate a new zone (to increase the length of a file)
-* free_zone: release a zone (when a file is removed)
-* rw_block: read or write a block from the disk itself
+*  free_zone: release a zone (when a file is removed)
+*   rw_block: read or write a block from the disk itself
 * invalidate: remove all the cache blocks on some device
 */
 
@@ -21,6 +21,16 @@
 #include "file.h"
 #include "fproc.h"
 #include "super.h"
+
+// get_block     获取_块
+// put_block       放_块？
+// alloc_zone    分配_分区
+// free_zone     空闲_分区
+// rw_block      读写_块
+// invalidate    无效的？
+// flushall      刷新所有流；刷新全部流？
+// rw_scattered  读写_分散
+// rm_lru        删除_最近最少使用(Least Recently Used)；
 
 FORWARD _PROTOTYPE( void rm_lru, (struct buf *bp) ); /* bp是Block Pointer？ */
 
@@ -69,7 +79,7 @@ int only_search;        /* if NO_READ, don’t read, else act normal */
                 return(bp);
             } else {
                 /* This block is not the one sought. */
-                bp = bp->b_hash; /* move to next block on hash chain */
+                bp = bp->b_hash; /* move to next block on hash chain (误chair)*/
             }
         }
     }

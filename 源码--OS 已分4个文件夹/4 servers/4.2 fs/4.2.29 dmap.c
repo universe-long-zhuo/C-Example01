@@ -35,25 +35,24 @@ Driver enabled Open/Cls I/O Driver # Flags Device File
 */
 struct dmap dmap[NR_DEVICES]; /* actual map */
 PRIVATE struct dmap init_dmap[] = {
-DT(1, no_dev, 0, 0, 0) /* 0 = not used */
-DT(1, gen_opcl, gen_io, MEM_PROC_NR, 0) /* 1 = /dev/mem */
-DT(0, no_dev, 0, 0, DMAP_MUTABLE) /* 2 = /dev/fd0 */
-DT(0, no_dev, 0, 0, DMAP_MUTABLE) /* 3 = /dev/c0 */
-DT(1, tty_opcl, gen_io, TTY_PROC_NR, 0) /* 4 = /dev/tty00 */
-DT(1, ctty_opcl,ctty_io, TTY_PROC_NR, 0) /* 5 = /dev/tty */
-DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /* 6 = /dev/lp */
-DT(1, no_dev, 0, 0, DMAP_MUTABLE) /* 7 = /dev/ip */
-DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /* 8 = /dev/c1 */
-DT(0, 0, 0, 0, DMAP_MUTABLE) /* 9 = not used */
-DT(0, no_dev, 0, 0, DMAP_MUTABLE) /*10 = /dev/c2 */
-1020 File: servers/fs/dmap.c MINIX SOURCE CODE
-DT(0, 0, 0, 0, DMAP_MUTABLE) /*11 = not used */
-DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*12 = /dev/c3 */
-DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*13 = /dev/audio */
-DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*14 = /dev/mixer */
-DT(1, gen_opcl, gen_io, LOG_PROC_NR, 0) /*15 = /dev/klog */
-DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*16 = /dev/random*/
-DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*17 = /dev/cmos */
+    DT(1, no_dev, 0, 0, 0) /* 0 = not used */
+    DT(1, gen_opcl, gen_io, MEM_PROC_NR, 0) /* 1 = /dev/mem */
+    DT(0, no_dev, 0, 0, DMAP_MUTABLE) /* 2 = /dev/fd0 */
+    DT(0, no_dev, 0, 0, DMAP_MUTABLE) /* 3 = /dev/c0 */
+    DT(1, tty_opcl, gen_io, TTY_PROC_NR, 0) /* 4 = /dev/tty00 */
+    DT(1, ctty_opcl,ctty_io, TTY_PROC_NR, 0) /* 5 = /dev/tty */
+    DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /* 6 = /dev/lp */
+    DT(1, no_dev, 0, 0, DMAP_MUTABLE) /* 7 = /dev/ip */
+    DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /* 8 = /dev/c1 */
+    DT(0, 0, 0, 0, DMAP_MUTABLE) /* 9 = not used */
+    DT(0, no_dev, 0, 0, DMAP_MUTABLE) /*10 = /dev/c2 */
+    DT(0, 0, 0, 0, DMAP_MUTABLE) /*11 = not used */
+    DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*12 = /dev/c3 */
+    DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*13 = /dev/audio */
+    DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*14 = /dev/mixer */
+    DT(1, gen_opcl, gen_io, LOG_PROC_NR, 0) /*15 = /dev/klog */
+    DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*16 = /dev/random*/
+    DT(0, no_dev, 0, NONE, DMAP_MUTABLE) /*17 = /dev/cmos */
 };
 
 // do_devctl  驱动程序控制
