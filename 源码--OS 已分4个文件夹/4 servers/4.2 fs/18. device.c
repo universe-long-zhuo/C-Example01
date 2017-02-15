@@ -5,18 +5,18 @@
 * Special character files also require I/O. The routines for these are here.
 *
 * The entry points in this file are:
-* dev_open: FS opens a device
-* dev_close: FS closes a device
-* dev_io: FS does a read or write on a device
+*   dev_open: FS opens a device
+*  dev_close: FS closes a device
+*     dev_io: FS does a read or write on a device
 * dev_status: FS processes callback request alert
-* gen_opcl: generic call to a task to perform an open/close
-* gen_io: generic call to a task to perform an I/O operation
-* no_dev: open/close processing for devices that don’t exist
-* tty_opcl: perform tty-specific processing for open/close
-* ctty_opcl: perform controlling-tty-specific processing for open/close
-* ctty_io: perform controlling-tty-specific processing for I/O
-* do_ioctl: perform the IOCTL system call
-* do_setsid: perform the SETSID system call (FS side)
+*   gen_opcl: generic call to a task to perform an open/close
+*     gen_io: generic call to a task to perform an I/O operation
+*     no_dev: open/close processing for devices that don’t exist
+*   tty_opcl: perform tty-specific processing for open/close
+*  ctty_opcl: perform controlling-tty-specific processing for open/close
+*    ctty_io: perform controlling-tty-specific processing for I/O
+*   do_ioctl: perform the IOCTL system call
+*  do_setsid: perform the SETSID system call (FS side)
 */
 
 #include "fs.h"

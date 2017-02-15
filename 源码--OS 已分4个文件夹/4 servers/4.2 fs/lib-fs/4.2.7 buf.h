@@ -37,13 +37,13 @@ bitchunk_t b__bitmap[FS_BITMAP_CHUNKS(MAX_BLOCK_SIZE)];
 } b;
 
 /* Header portion of the buffer. */
-struct buf *b_next; /* used to link all free bufs in a chain */
-struct buf *b_prev; /* used to link all free bufs the other way */
-struct buf *b_hash; /* used to link bufs on hash chains */
-block_t b_blocknr; /* block number of its (minor) device */
-dev_t b_dev; /* major | minor device where block resides */
-char b_dirt; /* CLEAN or DIRTY */
-char b_count; /* number of users of this buffer */
+struct buf *b_next;   /* used to link all free bufs in a chain */
+struct buf *b_prev;   /* used to link all free bufs the other way */
+struct buf *b_hash;   /* used to link bufs on hash chains */
+   block_t b_blocknr; /* block number of its (minor) device */
+     dev_t b_dev;     /* major | minor device where block resides */
+      char b_dirt;    /* CLEAN or DIRTY */
+      char b_count;   /* number of users of this buffer */
 } buf[NR_BUFS];
 
 /* A block is free if b_dev == NO_DEV. */
@@ -51,8 +51,8 @@ char b_count; /* number of users of this buffer */
 #define NIL_BUF ((struct buf *) 0) /* indicates absence of a buffer */
 
 /* These defs make it possible to use to bp->b_data instead of bp->b.b__data */
-#define b_data b.b__data
-#define b_dir b.b__dir
+#define   b_data b.b__data
+#define    b_dir b.b__dir
 #define b_v1_ind b.b__v1_ind
 #define b_v2_ind b.b__v2_ind
 #define b_v1_ino b.b__v1_ino
@@ -61,19 +61,19 @@ char b_count; /* number of users of this buffer */
 
 EXTERN struct buf *buf_hash[NR_BUF_HASH]; /* the buffer hash table */
 
-EXTERN struct buf *front; /* points to least recently used free block */
-EXTERN struct buf *rear; /* points to most recently used free block */
-EXTERN int bufs_in_use; /* # bufs currently in use (not on free list)*/
+EXTERN struct buf *front;  /* points to least recently used free block */
+EXTERN struct buf *rear;   /* points to most recently used free block */
+EXTERN    int bufs_in_use; /* # bufs currently in use (not on free list)*/
 
 /* When a block is released, the type of usage is passed to put_block(). */
 #define WRITE_IMMED 0100 /* block should be written to disk now */
-#define ONE_SHOT 0200 /* set if block not likely to be needed soon */
+#define    ONE_SHOT 0200 /* set if block not likely to be needed soon */
 
-#define INODE_BLOCK 0 /* inode block */
-#define DIRECTORY_BLOCK 1 /* directory block */
-#define INDIRECT_BLOCK 2 /* pointer block */
-#define MAP_BLOCK 3 /* bit map */
-#define FULL_DATA_BLOCK 5 /* data, fully used */
+#define        INODE_BLOCK 0 /* inode block */
+#define    DIRECTORY_BLOCK 1 /* directory block */
+#define     INDIRECT_BLOCK 2 /* pointer block */
+#define          MAP_BLOCK 3 /* bit map */
+#define    FULL_DATA_BLOCK 5 /* data, fully used */
 #define PARTIAL_DATA_BLOCK 6 /* data, partly used*/
 
 #define HASH_MASK (NR_BUF_HASH - 1) /* mask for hashing block numbers */
