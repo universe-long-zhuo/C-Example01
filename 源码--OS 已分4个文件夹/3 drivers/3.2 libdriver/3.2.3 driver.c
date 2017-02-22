@@ -5,32 +5,32 @@
 *
 * Changes:
 * Jul 25, 2005 added SYS_SIG type for signals (Jorrit N. Herder)
-* Sep 15, 2004 added SYN_ALARM type for timeouts (Jorrit N. Herder)
+* Sep 15, 2004 added SYN_ALARM type for timeouts (Jorrit N. Herder)  alarm 报警；alert 警报。
 * Jul 23, 2004 removed kernel dependencies (Jorrit N. Herder)
-* Apr 02, 1992 constructed from AT wini and floppy driver (Kees J. Bot)
+* Apr 02, 1992 constructed from AT wini and floppy driver (Kees J. Bot)  软盘floppy
 *
 *
 * The drivers support the following operations (using message format m2):
 *
 * m_type DEVICE PROC_NR COUNT POSITION ADRRESS
 * ----------------------------------------------------------------
-* | DEV_OPEN   | device | proc nr| | | |
+* | DEV_OPEN   | device  | proc nr |         |         |         |
 * |------------+---------+---------+---------+---------+---------|
-* | DEV_CLOSE  | device | proc nr| | | |
+* | DEV_CLOSE  | device  | proc nr |         |         |         |
 * |------------+---------+---------+---------+---------+---------|
-* | DEV_READ   | device | proc nr | bytes | offset | buf ptr |
+* | DEV_READ   | device  | proc nr | bytes   | offset  | buf ptr |
 * |------------+---------+---------+---------+---------+---------|
-* | DEV_WRITE  | device | proc nr | bytes | offset | buf ptr |
+* | DEV_WRITE  | device  | proc nr | bytes   | offset  | buf ptr |
 * |------------+---------+---------+---------+---------+---------|
-* | DEV_GATHER | device | proc nr | iov len | offset | iov ptr |
+* | DEV_GATHER | device  | proc nr | iov len | offset  | iov ptr |
 * |------------+---------+---------+---------+---------+---------|
-* | DEV_SCATTER| device | proc nr | iov len | offset | iov ptr |
+* | DEV_SCATTER| device  | proc nr | iov len | offset  | iov ptr |
 * |------------+---------+---------+---------+---------+---------|
-* | DEV_IOCTL  | device | proc nr |func code| | buf ptr |
+* | DEV_IOCTL  | device  | proc nr |func code|         | buf ptr |
 * |------------+---------+---------+---------+---------+---------|
-* | CANCEL     | device | proc nr | r/w | | |
+* | CANCEL     | device  | proc nr | r/w     |         |         |
 * |------------+---------+---------+---------+---------+---------|
-* | HARD_STOP  | | | | | |
+* | HARD_STOP  |         |         |         |         |         |
 * ----------------------------------------------------------------
 *
 * The file contains one entry point:
@@ -56,25 +56,25 @@ FORWARD _PROTOTYPE( int do_vrdwt, (struct driver *dr, message *mp) );
 int device_caller;
 
 // Minix驱动可以响应的消息有有六大类： 
-// 1. OPEN，打开设备； 
-// 2. CLOSE，关闭设备； 
-// 3. READ，对设备读操作； 
-// 4. WRITE，对设备写操作； 
-// 5. IOCTL，用于I/O控制； 
-// 6. SCATERED_IO，预读消息。
+// 1. OPEN         打开设备； 
+// 2. CLOSE        关闭设备； 
+// 3. READ         对设备读操作； 
+// 4. WRITE        对设备写操作； 
+// 5. IOCTL        用于I/O控制； 
+// 6. SCATERED_IO  预读消息。
 
 // driver_task 驱动程序_任务
 // init_buffer   初始化_缓冲区
 // do_rdwt           做_读驱动程序等待
 // do_vrdwt          做_向量驱动程序等待
 // no_name         没有_姓名
-// do_nop            做_没有什么
-// nop_signal  没有什么_信号
-// nop_alarm   没有什么_警告
-// nop_prepare 没有什么_准备
-// nop_cleanup 没有什么_清理
-// nop_cancel  没有什么_取消
-// nop_select  没有什么_选择
+// do_nop            做_没有指针
+// nop_signal  没有指针_信号
+// nop_alarm   没有指针_警告
+// nop_prepare 没有指针_准备
+// nop_cleanup 没有指针_清理
+// nop_cancel  没有指针_取消
+// nop_select  没有指针_选择
 // do_diocntl        做_驱动程序输入输出控制
 
 // 参数& 取地址符号
@@ -84,7 +84,7 @@ int device_caller;
 /*===========================================================================*
 *                       driver_task 驱动程序_任务 *
 *===========================================================================*/
-// 参数dp是不是device points的缩写？
+// 参数dp是不是device points的缩写？不是，终于明白了，如果有*，就写后缀p
 PUBLIC void driver_task(dp)
 struct driver *dp; /* Device dependent entry points. */
 {
@@ -243,7 +243,7 @@ message *mp; /* pointer to read or write message */
     /* Transfer bytes from/to the device. */
     r = (*dp->dr_transfer)(mp->PROC_NR, mp->m_type, mp->POSITION, iov, nr_req);
 
-    /* Copy the I/O vector back to the caller. */
+    /* Copy the I/O vector向量 back to the caller. */
     if (mp->m_source >= 0) {
         sys_datacopy(SELF, (vir_bytes) iovec,
         mp->m_source, (vir_bytes) mp->ADDRESS, iovec_size);
@@ -265,7 +265,7 @@ PUBLIC char *no_name()
     return name;
 }
 /*============================================================================*
-*                       do_nop 做_没有任何 *
+*                       do_nop 做_没有指针 *
 *============================================================================*/
 PUBLIC int do_nop(dp, mp)
 struct driver *dp;
@@ -281,7 +281,7 @@ message *mp;
     }
 }
 /*============================================================================*
-*                       nop_signal 没有任何_信号 *
+*                       nop_signal 没有指针_信号 *
 *============================================================================*/
 PUBLIC void nop_signal(dp, mp)
 struct driver *dp;
@@ -290,16 +290,16 @@ message *mp;
     /* Default action for signal is to ignore. */
 }
 /*============================================================================*
-*                       nop_alarm 没有任何_警告 *
+*                       nop_alarm 没有指针_警告 *
 *============================================================================*/
 PUBLIC void nop_alarm(dp, mp)
 struct driver *dp;
 message *mp;
 {
-    /* Ignore the leftover alarm. */
+    /* Ignore忽视 the leftover剩余 alarm. */
 }
 /*===========================================================================*
-*                       nop_prepare 没有任何_准备 *
+*                       nop_prepare 没有指针_准备 *
 *===========================================================================*/
 PUBLIC struct device *nop_prepare(device)
 {
@@ -307,14 +307,14 @@ PUBLIC struct device *nop_prepare(device)
     return(NIL_DEV);
 }
 /*===========================================================================*
-*                       nop_cleanup 没有任何_清理 *
+*                       nop_cleanup 没有指针_清理 *
 *===========================================================================*/
 PUBLIC void nop_cleanup()
 {
     /* Nothing to clean up. */
 }
 /*===========================================================================*
-*                       nop_cancel 没有任何_取消 *
+*                       nop_cancel 没有指针_取消 *
 *===========================================================================*/
 PUBLIC int nop_cancel(struct driver *dr, message *m)
 {
@@ -322,7 +322,7 @@ PUBLIC int nop_cancel(struct driver *dr, message *m)
     return(OK);
 }
 /*===========================================================================*
-*                       nop_select 没有任何_选择 *
+*                       nop_select 没有指针_选择 *
 *===========================================================================*/
 PUBLIC int nop_select(struct driver *dr, message *m)
 {
@@ -336,7 +336,7 @@ PUBLIC int do_diocntl(dp, mp)
 struct driver *dp;
 message *mp; /* pointer to ioctl request */
 {
-/* Carry out a partition setting/getting request. */
+/* Carry out a partition setting/getting request. 携带，carry-out完成*/
     struct device *dv;
     struct partition entry;
     int s;
@@ -358,7 +358,7 @@ message *mp; /* pointer to ioctl request */
         dv->dv_base = entry.base;
         dv->dv_size = entry.size;
     } else {
-        /* Return a partition table entry and the geometry of the drive. */
+        /* Return a partition table entry and the geometry of the drive. geometry几何*/
         entry.base = dv->dv_base;
         entry.size = dv->dv_size;
         (*dp->dr_geometry)(&entry);
