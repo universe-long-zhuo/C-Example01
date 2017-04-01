@@ -79,9 +79,9 @@ cp_mess(s, (sp)->p_memmap[D].mem_phys, \
 (vir_bytes)sm, (dp)->p_memmap[D].mem_phys, (vir_bytes)dm)
 
 // sys_call     系统_调用
-// mini_send    ？_发送
-// mini_receive ？_接收
-// mini_notify  ？_通知
+// mini_send    迷你_发送
+// mini_receive 迷你_接收
+// mini_notify  迷你_通知
 // lock_notify  锁_通知
 // enqueue      队列
 // dequeue      散队
