@@ -299,19 +299,19 @@ PRIVATE void init_params()
 {
 /* This routine is called at startup to initialize the drive parameters. */
 
-    u16_t parv[2];
+           u16_t parv[2];
     unsigned int vector, size;
-    int drive, nr_drives;
-    struct wini *wn;
-    u8_t params[16];
-    int s;
+             int drive, nr_drives;
+     struct wini *wn;
+            u8_t params[16];
+             int s;
 
     /* Boot variables. */
     env_parse("ata_std_timeout", "d", 0, &w_standard_timeouts, 0, 1);
-    env_parse("ata_pci_debug", "d", 0, &w_pci_debug, 0, 1);
-    env_parse("ata_instance", "d", 0, &w_instance, 0, 8);
-    env_parse("ata_lba48", "d", 0, &w_lba48, 0, 1);
-    env_parse("atapi_debug", "d", 0, &atapi_debug, 0, 1);
+    env_parse("ata_pci_debug",   "d", 0, &w_pci_debug,         0, 1);
+    env_parse("ata_instance",    "d", 0, &w_instance,          0, 8);
+    env_parse("ata_lba48",       "d", 0, &w_lba48,             0, 1);
+    env_parse("atapi_debug",     "d", 0, &atapi_debug,         0, 1);
 
     if (w_instance == 0) {
         /* Get the number of drives from the BIOS data area */
